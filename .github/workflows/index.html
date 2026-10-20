@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>eBook Publisher</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:640px;margin:20px auto;padding:0 14px;background:#f4f4f4}
+.box{background:#fff;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px #0002}
+button{padding:9px 16px;border:0;border-radius:6px;background:#111;color:#fff;cursor:pointer}
+button:disabled{opacity:.5}
+.bar{height:16px;background:#ddd;border-radius:8px;overflow:hidden;margin:10px 0 6px}
+.fill{height:100%;width:0;background:#2e9e4f;transition:width .4s}
+.fill.err{background:#d33}
+input[type=password]{width:100%;padding:8px;box-sizing:border-box}
+small{color:#555}
+</style></head><body>
+<h2>eBook Publisher</h2>
+
+<div class="box">
+  <b>GitHub token (sirf ek baar)</b><br><br>
+  <input type="password" id="tok" placeholder="github_pat_...">
+  <br><br><button onclick="saveTok()">Save</button> <small id="tokmsg"></small>
+</div>
+
+<div class="box"><label><input type="checkbox" id="pub"> Seedha publish karo (nahi to sirf draft banega)</label></div>
+
+<div id="rows"></div>
+<div class="box"><button onclick="startAll()">Teeno upload karo</button></div>
+
+<script>
+const OWNER="sabir151", REPO="ebook-publisher", WF="ebook.yml";
+const LANGS=[["hindi","Hindi"],["english","English"],["urdu","Urdu"]];
+const $=id=>document.getElementById(id);
+$("tok").value=localStorage.getItem("ghtok")||"";
+function saveTok(){localStorage.setItem("ghtok",$("tok").value.trim());$("tokmsg").textContent="Save ho gaya"}
+function gh(path,opts){
+  return fetch("https://api.github.com/repos/"+OWNER+"/"+REPO+path,Object.assign({headers:{
+    Authorization:"Bearer "+localStorage.getItem("ghtok"),Accept:"application/vnd.github+json","Content-Type":"application/json"}},opts||{}));
+}
+$("rows").innerHTML=LANGS.map(([k,n])=>`<div class="box"><b>${n}</b>
+ <button id="b_${k}" onclick="start('${k}')" style="float:right">Upload</button>
+ <div class="bar"><div class="fill" id="f_${k}"></div></div><small id="s_${k}">Tayyar</small></div>`).join("");
+
+async function start(k){
+  if(!localStorage.getItem("ghtok")){alert("Pehle GitHub token Save karo");return}
+  $("b_"+k).disabled=true; $("f_"+k).className="fill"; $("f_"+k).style.width="2%";
+  $("s_"+k).textContent="Shuru kar rahe hain...";
+  const t0=Date.now();
+  const r=await gh("/actions/workflows/"+WF+"/dispatches",{method:"POST",
+    body:JSON.stringify({ref:"main",inputs:{lang:k,publish:$("pub").checked?"true":"false"}})});
+  if(r.status!==204){fail(k,"Start nahi hua ("+r.status+"). Token ya repo check karo.");return}
+  poll(k,t0);
+}
+function fail(k,msg){$("f_"+k).className="fill err";$("s_"+k).textContent=msg;$("b_"+k).disabled=false}
+async function poll(k,t0){
+  try{
+    const r=await (await gh("/actions/runs?event=workflow_dispatch&per_page=15")).json();
+    const run=(r.workflow_runs||[]).find(x=>x.display_title==="eBook "+k && new Date(x.created_at).getTime()>=t0-90000);
+    if(!run){$("s_"+k).textContent="Queue mein hai...";return setTimeout(()=>poll(k,t0),4000)}
+    const j=(await (await gh("/actions/runs/"+run.id+"/jobs")).json()).jobs[0];
+    if(j){
+      const st=j.steps||[]; const done=st.filter(s=>s.status==="completed").length;
+      const cur=st.find(s=>s.status==="in_progress");
+      $("f_"+k).style.width=Math.max(3,Math.round(done/Math.max(st.length,1)*100))+"%";
+      $("s_"+k).textContent=cur?cur.name:"Chal raha hai...";
+    }
+    if(run.status==="completed"){
+      if(run.conclusion==="success"){$("f_"+k).style.width="100%";$("s_"+k).textContent="Ho gaya! Gumroad mein product check karo.";$("b_"+k).disabled=false}
+      else{fail(k,"Error aaya. Log: "+run.html_url)}
+      return;
+    }
+    setTimeout(()=>poll(k,t0),4000);
+  }catch(e){setTimeout(()=>poll(k,t0),6000)}
+}
+async function startAll(){for(const [k] of LANGS){start(k);await new Promise(r=>setTimeout(r,4000))}}
+</script></body></html>
