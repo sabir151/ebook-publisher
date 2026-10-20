@@ -1,0 +1,55 @@
+name: ebook
+run-name: eBook ${{ inputs.lang }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      lang:
+        description: hindi / english / urdu
+        required: true
+      publish:
+        description: publish (true/false)
+        default: "false"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      EB_LANG: ${{ inputs.lang }}
+      EB_PUBLISH: ${{ inputs.publish }}
+      GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GUMROAD_TOKEN: ${{ inputs.lang == 'hindi' && secrets.GUMROAD_TOKEN_HINDI || inputs.lang == 'english' && secrets.GUMROAD_TOKEN_ENGLISH || secrets.GUMROAD_TOKEN_URDU }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 1 Taiyari
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y fonts-noto-core libpango-1.0-0 libpangoft2-1.0-0
+          pip install google-api-python-client google-auth requests weasyprint pillow
+      - name: 2 Drive se file le rahe hain
+        run: python ebook.py fetch
+      - name: 3 eBook likh rahe hain
+        run: python ebook.py write
+      - name: 4 PDF bana rahe hain
+        run: python ebook.py pdf
+      - name: 5 Cover save kar rahe hain
+        run: |
+          git config user.name "ebook-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add covers || true
+          git commit -m "cover ${{ inputs.lang }}" || echo "koi cover nahi"
+          for i in 1 2 3; do git pull --rebase && git push && break || sleep 5; done
+      - name: 6 Gumroad par upload
+        run: python ebook.py upload
+      - name: 7 PDF backup
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ebook-pdf-${{ inputs.lang }}
+          path: work/ebook.pdf
+          if-no-files-found: ignore
