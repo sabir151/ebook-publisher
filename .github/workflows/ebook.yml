@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
       EB_LANG: ${{ inputs.lang }}
@@ -26,6 +26,9 @@ jobs:
       GUMROAD_TOKEN: ${{ inputs.lang == 'hindi' && secrets.GUMROAD_TOKEN_HINDI || inputs.lang == 'english' && secrets.GUMROAD_TOKEN_ENGLISH || secrets.GUMROAD_TOKEN_URDU }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - name: 1 Taiyari
         run: |
           sudo apt-get update -y
