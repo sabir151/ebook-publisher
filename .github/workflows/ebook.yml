@@ -23,6 +23,7 @@ jobs:
       EB_PUBLISH: ${{ inputs.publish }}
       GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GROQ_MODEL: openai/gpt-oss-120b
       GUMROAD_TOKEN: ${{ inputs.lang == 'hindi' && secrets.GUMROAD_TOKEN_HINDI || inputs.lang == 'english' && secrets.GUMROAD_TOKEN_ENGLISH || secrets.GUMROAD_TOKEN_URDU }}
     steps:
       - uses: actions/checkout@v4
