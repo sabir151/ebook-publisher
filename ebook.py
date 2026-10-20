@@ -81,7 +81,7 @@ def fetch():
         # PDF ke pehle page ke liye (A5 portrait) - bina kate
         fit(im, 1480, 2100).save("work/cover.jpg", quality=90)
         # Gumroad cover/thumbnail ke liye (square, 1000x1000) - bina kate
-        fit(im, 1000, 1000).save(f"covers/{LANG}.jpg", quality=92)
+        fit(im, 600, 600).save(f"covers/{LANG}.jpg", quality=92)
     else:
         print("WARNING: is language ki thumbnail/image nahi mili, bina cover ke banega")
 
