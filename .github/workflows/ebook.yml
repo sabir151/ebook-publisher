@@ -24,7 +24,7 @@ jobs:
       GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       GROQ_MODEL: openai/gpt-oss-120b
-      GUMROAD_TOKEN: ${{ inputs.lang == 'hindi' && secrets.GUMROAD_TOKEN_HINDI || inputs.lang == 'english' && secrets.GUMROAD_TOKEN_ENGLISH || secrets.GUMROAD_TOKEN_URDU }}
+      GUMROAD_TOKEN: ${{ secrets.GUMROAD_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -39,14 +39,14 @@ jobs:
         run: python ebook.py fetch
       - name: 3 eBook likh rahe hain
         run: python ebook.py write
-      - name: 4 PDF bana rahe hain
+      - name: 4 PDF aur EPUB bana rahe hain
         run: python ebook.py pdf
-      - name: 5 Cover save kar rahe hain
+      - name: 5 Cover, EPUB aur info save kar rahe hain
         run: |
           git config user.name "ebook-bot"
           git config user.email "bot@users.noreply.github.com"
           git add covers || true
-          git commit -m "cover ${{ inputs.lang }}" || echo "koi cover nahi"
+          git commit -m "files ${{ inputs.lang }}" || echo "koi nayi file nahi"
           for i in 1 2 3; do git pull --rebase && git push && break || sleep 5; done
       - name: 6 Gumroad par upload
         run: python ebook.py upload
