@@ -43,6 +43,10 @@ def fit(im, w, h):
     return bg
 
 
+def to_text(raw):
+    return (raw.decode("utf-8-sig", errors="ignore") if isinstance(raw, bytes) else raw).strip()
+
+
 def fetch():
     d = drive()
     r = d.files().list(
@@ -62,19 +66,29 @@ def fetch():
         if not token:
             break
     mine = [f for f in files if LANG in f["name"].lower()]
+    mds = [f for f in mine if f["name"].lower().endswith(".md")]
     texts = [f for f in mine if f["name"].lower().endswith(".txt")
              or f["mimeType"] in ("text/plain", "application/vnd.google-apps.document")]
     imgs = [f for f in mine if f["mimeType"].startswith("image/")]
-    if not texts:
-        names = ", ".join(f["name"] for f in files[:30])
-        sys.exit(f"'{LANG}' naam wali text file nahi mili. Folder mein: {names}")
-    t = texts[0]
-    print("Script file:", t["name"])
-    raw = download(d, t)
-    text = (raw.decode("utf-8-sig", errors="ignore") if isinstance(raw, bytes) else raw).strip()
-    if len(text) < 50:
-        sys.exit("Text file khali ya bahut chhoti hai")
-    open("work/script.txt", "w", encoding="utf-8").write(text)
+
+    if mds:
+        t = mds[0]
+        print("eBook file (md):", t["name"])
+        text = to_text(download(d, t))
+        if len(text) < 200:
+            sys.exit("md file khali ya bahut chhoti hai")
+        open("work/ebook.md", "w", encoding="utf-8").write(text)
+    else:
+        if not texts:
+            names = ", ".join(f["name"] for f in files[:30])
+            sys.exit(f"'{LANG}' naam wali md/text file nahi mili. Folder mein: {names}")
+        t = texts[0]
+        print("Script file:", t["name"])
+        text = to_text(download(d, t))
+        if len(text) < 50:
+            sys.exit("Text file khali ya bahut chhoti hai")
+        open("work/script.txt", "w", encoding="utf-8").write(text)
+
     if imgs:
         from PIL import Image
         print("Cover file:", imgs[0]["name"])
@@ -131,7 +145,119 @@ def parse_json(s):
         raise
 
 
+def md_to_book(text):
+    """Markdown ko title + chapters mein todta hai."""
+    text = re.sub(r"```.*?```", "", text.replace("\r", ""), flags=re.S)
+    intro_title = {"hindi": "भूमिका", "english": "Introduction", "urdu": "تعارف"}[LANG]
+
+    def inline(s):
+        s = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", s)
+        s = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", s)
+        s = re.sub(r"\*\*(.+?)\*\*", r"\1", s)
+        s = re.sub(r"__(.+?)__", r"\1", s)
+        s = re.sub(r"\*(.+?)\*", r"\1", s)
+        s = re.sub(r"`([^`]*)`", r"\1", s)
+        return s.strip()
+
+    title = None
+    chapters = []
+    pre = []
+    buf = []
+
+    def add(p):
+        p = inline(p)
+        if p:
+            (chapters[-1]["paras"] if chapters else pre).append(p)
+
+    def flush():
+        if buf:
+            add(" ".join(buf))
+            del buf[:]
+
+    for raw in text.split("\n"):
+        line = raw.strip()
+        if not line:
+            flush()
+            continue
+        if re.match(r"^(-{3,}|\*{3,}|_{3,})$", line):
+            flush()
+            continue
+        m = re.match(r"^(#{1,6})\s+(.+?)\s*#*$", line)
+        if m:
+            flush()
+            lvl, h = len(m.group(1)), inline(m.group(2))
+            if title is None and lvl == 1 and not chapters:
+                title = h
+            elif lvl <= 2:
+                chapters.append({"title": h, "paras": []})
+            else:
+                add(h)
+            continue
+        if line.startswith("|"):
+            flush()
+            if re.match(r"^[\s:\-|]+$", line):
+                continue
+            cells = [inline(c) for c in line.strip("|").split("|")]
+            add(" — ".join(c for c in cells if c))
+            continue
+        m = re.match(r"^([-*+]|\d+[.)])\s+(.*)$", line)
+        if m:
+            flush()
+            mark = "•" if m.group(1) in ("-", "*", "+") else m.group(1)
+            add(mark + " " + m.group(2))
+            continue
+        buf.append(re.sub(r"^>\s?", "", line))
+    flush()
+
+    if title is None:
+        if chapters:
+            first = chapters.pop(0)
+            title = first["title"]
+            pre.extend(first["paras"])
+        elif pre:
+            title = pre.pop(0)[:120]
+        else:
+            sys.exit("md file mein kuch likha hua nahi mila")
+    subtitle = ""
+    if pre and chapters and len(" ".join(pre)) < 200:
+        subtitle = " ".join(pre)
+        pre = []
+    if not chapters:
+        chapters = [{"title": title, "paras": pre}]
+    elif pre:
+        chapters.insert(0, {"title": intro_title, "paras": pre})
+    out = [{"title": c["title"], "text": "\n\n".join(c["paras"])} for c in chapters if c["paras"]]
+    if not out:
+        sys.exit("md file mein chapters ka text nahi mila")
+    return {"title": title, "subtitle": subtitle, "description": "", "keywords": [], "chapters": out}
+
+
 def write():
+    if os.path.exists("work/ebook.md"):
+        book = md_to_book(open("work/ebook.md", encoding="utf-8").read())
+        body = " ".join(c["text"] for c in book["chapters"])[:3000]
+        book["description"] = body[:300]
+        try:
+            out = groq([
+                {"role": "system", "content": "You are an eBook marketer. Reply only with JSON."},
+                {"role": "user", "content":
+                    f"eBook title: {book['title']}\nLanguage: {LANG_NAME}\n"
+                    'Return JSON: {"subtitle": "short subtitle", "description": "2-3 sentence sales description", '
+                    '"keywords": ["7 short search keywords"]}. All text in the same language as the eBook.\n\n'
+                    "EBOOK TEXT:\n" + body}
+            ], max_tokens=1500, json_mode=True)
+            meta = parse_json(out)
+            book["description"] = clean(meta.get("description", "")) or book["description"]
+            if not book["subtitle"]:
+                book["subtitle"] = clean(meta.get("subtitle", ""))
+            book["keywords"] = [clean(str(k)) for k in meta.get("keywords", [])][:7]
+        except (Exception, SystemExit) as ex:
+            print("Description/keywords Groq se nahi bane, simple wala use kiya:", ex)
+        print("md se eBook tayyar:", book["title"], "-", len(book["chapters"]), "chapters")
+        json.dump(book, open("work/book.json", "w", encoding="utf-8"), ensure_ascii=False)
+        return
+
+    # md file na ho to purana tarika: script se AI eBook likhta hai
     script = open("work/script.txt", encoding="utf-8").read()[:6000]
     out = groq([
         {"role": "system", "content": "You are a professional eBook author. Reply only with JSON."},
