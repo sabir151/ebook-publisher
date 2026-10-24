@@ -1,4 +1,4 @@
-import os, sys, io, json, re, time, html, requests
+import os, sys, io, json, re, time, html, zipfile, uuid, requests
 
 LANG = os.environ.get("EB_LANG", "").strip().lower()
 if LANG not in ("hindi", "english", "urdu"):
@@ -8,6 +8,7 @@ PRICE_CENTS = os.environ.get("PRICE_CENTS", "500")
 CTA = os.environ.get("EB_CTA", "download")
 LANG_NAME = {"hindi": "Hindi (Devanagari script)", "english": "English",
              "urdu": "Urdu (Urdu script, right to left)"}[LANG]
+LANG_CODE = {"hindi": "hi", "english": "en", "urdu": "ur"}[LANG]
 os.makedirs("work", exist_ok=True)
 os.makedirs("covers", exist_ok=True)
 
@@ -80,7 +81,7 @@ def fetch():
         im = Image.open(io.BytesIO(download(d, imgs[0]))).convert("RGB")
         # PDF ke pehle page ke liye (A5 portrait) - bina kate
         fit(im, 1480, 2100).save("work/cover.jpg", quality=90)
-        # Gumroad cover/thumbnail ke liye (square, 1000x1000) - bina kate
+        # Gumroad cover/thumbnail ke liye (square, 600x600) - bina kate
         fit(im, 600, 600).save(f"covers/{LANG}.jpg", quality=92)
     else:
         print("WARNING: is language ki thumbnail/image nahi mili, bina cover ke banega")
@@ -137,12 +138,15 @@ def write():
         {"role": "user", "content":
             f"Below is a video script. Plan an eBook on the same topic, written in {LANG_NAME}.\n"
             'Return JSON: {"title": "...", "subtitle": "...", "description": "2-3 sentence sales description", '
+            '"keywords": ["7 short search keywords"], '
             '"chapters": ["8 chapter titles"]}. All text in the target language.\n\nSCRIPT:\n' + script}
     ], max_tokens=2500, json_mode=True)
     plan = parse_json(out)
     chapters = plan["chapters"][:8]
     book = {"title": clean(plan["title"]), "subtitle": clean(plan.get("subtitle", "")),
-            "description": clean(plan.get("description", "")), "chapters": []}
+            "description": clean(plan.get("description", "")),
+            "keywords": [clean(str(k)) for k in plan.get("keywords", [])][:7],
+            "chapters": []}
     for i, ct in enumerate(chapters, 1):
         print(f"Chapter {i}/{len(chapters)}: {ct}")
         body = groq([
@@ -188,6 +192,93 @@ p {{ margin: 0 0 3mm 0; }}
     parts.append("</body></html>")
     HTML(string="".join(parts), base_url=".").write_pdf("work/ebook.pdf")
     print("PDF ban gayi:", os.path.getsize("work/ebook.pdf"), "bytes")
+    try:
+        epub()
+    except Exception as ex:
+        print("EPUB nahi bani (Gumroad upload par asar nahi):", ex)
+
+
+def epub():
+    """KDP aur Google Play Books ke liye EPUB + cover + publish-info banata hai (covers/ folder mein)."""
+    from PIL import Image
+    book = json.load(open("work/book.json", encoding="utf-8"))
+    e = html.escape
+    rtl = LANG == "urdu"
+    now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+    has_cover = os.path.exists("work/cover.jpg")
+    kdp_cover = f"covers/{LANG}-kdp-cover.jpg"
+    if has_cover:
+        im = Image.open("work/cover.jpg").convert("RGB")
+        fit(im, 1600, 2560).save(kdp_cover, quality=92)
+
+    css = ("body{font-family:serif;line-height:1.7;direction:%s;} "
+           "h1,h2{text-align:center;} p{margin:0 0 .8em 0;}" % ("rtl" if rtl else "ltr"))
+
+    def page(title, body):
+        return ('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html>'
+                '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" '
+                f'lang="{LANG_CODE}" xml:lang="{LANG_CODE}"><head><meta charset="utf-8"/>'
+                f'<title>{e(title)}</title><link rel="stylesheet" type="text/css" href="style.css"/>'
+                f'</head><body>{body}</body></html>')
+
+    pages = [("title", book["title"],
+              f"<h1>{e(book['title'])}</h1><p style='text-align:center'>{e(book['subtitle'])}</p>")]
+    for i, c in enumerate(book["chapters"], 1):
+        body = f"<h2>{e(c['title'])}</h2>"
+        for p in re.split(r"\n\s*\n", c["text"]):
+            if p.strip():
+                body += f"<p>{e(p.strip())}</p>"
+        pages.append((f"ch{i}", c["title"], body))
+
+    nav_items = "".join(f'<li><a href="{pid}.xhtml">{e(t)}</a></li>' for pid, t, _ in pages)
+    nav = ('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html>'
+           '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" '
+           f'lang="{LANG_CODE}" xml:lang="{LANG_CODE}"><head><meta charset="utf-8"/><title>Contents</title></head>'
+           f'<body><nav epub:type="toc" id="toc"><ol>{nav_items}</ol></nav></body></html>')
+
+    manifest = ('<item id="css" href="style.css" media-type="text/css"/>'
+                '<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>')
+    if has_cover:
+        manifest += '<item id="cover" href="cover.jpg" media-type="image/jpeg" properties="cover-image"/>'
+    manifest += "".join(f'<item id="{pid}" href="{pid}.xhtml" media-type="application/xhtml+xml"/>'
+                        for pid, _, _ in pages)
+    spine = '<itemref idref="nav" linear="no"/>' + "".join(f'<itemref idref="{pid}"/>' for pid, _, _ in pages)
+    opf = ('<?xml version="1.0" encoding="utf-8"?>'
+           '<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid">'
+           '<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">'
+           f'<dc:identifier id="bookid">urn:uuid:{uuid.uuid4()}</dc:identifier>'
+           f'<dc:title>{e(book["title"])}</dc:title><dc:language>{LANG_CODE}</dc:language>'
+           f'<dc:creator>Dr. Sabir Hussain</dc:creator>'
+           f'<dc:description>{e(book["description"])}</dc:description>'
+           f'<meta property="dcterms:modified">{now}</meta></metadata>'
+           f'<manifest>{manifest}</manifest>'
+           f'<spine page-progression-direction="{"rtl" if rtl else "ltr"}">{spine}</spine></package>')
+    container = ('<?xml version="1.0"?><container version="1.0" '
+                 'xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles>'
+                 '<rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>'
+                 '</rootfiles></container>')
+
+    out = f"covers/{LANG}.epub"
+    with zipfile.ZipFile(out, "w") as z:
+        z.writestr("mimetype", "application/epub+zip", compress_type=zipfile.ZIP_STORED)
+        z.writestr("META-INF/container.xml", container, compress_type=zipfile.ZIP_DEFLATED)
+        z.writestr("OEBPS/content.opf", opf, compress_type=zipfile.ZIP_DEFLATED)
+        z.writestr("OEBPS/nav.xhtml", nav, compress_type=zipfile.ZIP_DEFLATED)
+        z.writestr("OEBPS/style.css", css, compress_type=zipfile.ZIP_DEFLATED)
+        for pid, t, body in pages:
+            z.writestr(f"OEBPS/{pid}.xhtml", page(t, body), compress_type=zipfile.ZIP_DEFLATED)
+        if has_cover:
+            z.write(kdp_cover, "OEBPS/cover.jpg", compress_type=zipfile.ZIP_DEFLATED)
+
+    kdp_note = ("KDP par upload KARO (Hindi/English eBook)" if LANG != "urdu"
+                else "KDP Urdu support nahi karta - sirf Google Play Books par daalo")
+    info = (f"TITLE: {book['title']}\nSUBTITLE: {book['subtitle']}\nLANGUAGE: {LANG_NAME}\n"
+            f"KEYWORDS: {', '.join(book.get('keywords', []))}\n\nDESCRIPTION:\n{book['description']}\n\n"
+            f"FILES: {LANG}.epub (book), {LANG}-kdp-cover.jpg (cover 1600x2560)\n"
+            f"KDP: {kdp_note}\nGoogle Play Books: upload KARO\n")
+    open(f"covers/{LANG}-publish-info.txt", "w", encoding="utf-8").write(info)
+    print("EPUB + publish-info ban gayi: covers/ folder dekho")
 
 
 def upload():
