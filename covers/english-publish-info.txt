@@ -1,10 +1,10 @@
-TITLE: Smart Money Mastery: Build Wealth Beyond Salary
-SUBTITLE: Proven Strategies to Grow Assets, Leverage Debt, and Overcome Financial Biases
+TITLE: Hello Friends: Mastering Wealth, Mindset & Money Management
+SUBTITLE: Simple Strategies to Build Assets, Grow Savings, and Overcome Financial Biases
 LANGUAGE: English
-KEYWORDS: wealth building, asset investing, compound interest, debt management, financial psychology, emergency fund, networking for success
+KEYWORDS: wealth building, asset investing, compound growth, financial psychology, debt management, emergency fund, money mindset
 
 DESCRIPTION:
-Discover how to transform earnings into lasting wealth by investing in assets, harnessing compound growth, and using debt wisely. Learn to protect your finances with emergency funds, navigate psychological money traps, and leverage powerful networks for success. This guide offers practical steps to break free from salary dependence and build a resilient financial future.
+Discover practical ways to create true wealth beyond a salary, from investing in assets and harnessing compound growth to using debt wisely and building an emergency fund. Learn how your mind influences spending and how to avoid common psychological traps like FOMO and lifestyle inflation. This guide offers clear, actionable steps to secure your financial future and leverage the power of a strong network.
 
 FILES: english.epub (book), english-kdp-cover.jpg (cover 1600x2560)
 KDP: KDP par upload KARO (Hindi/English eBook)
