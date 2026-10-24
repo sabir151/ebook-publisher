@@ -336,4 +336,271 @@ def write():
 
     # md file na ho to purana tarika: script se AI eBook likhta hai
     script = open("work/script.txt", encoding="utf-8").read()[:6000]
-    out =
+    out = groq([
+        {"role": "system", "content": "You are a professional eBook author. Reply only with JSON."},
+        {"role": "user", "content":
+            f"Below is a video script. Plan an eBook on the same topic, written in {LANG_NAME}.\n"
+            'Return JSON: {"title": "...", "subtitle": "...", "description": "2-3 sentence sales description", '
+            '"keywords": ["7 short search keywords"], '
+            '"chapters": ["8 chapter titles"]}. All text in the target language.\n\nSCRIPT:\n' + script}
+    ], max_tokens=2500, json_mode=True)
+    plan = parse_json(out)
+    chapters = plan["chapters"][:8]
+    book = {"title": clean(plan["title"]), "subtitle": clean(plan.get("subtitle", "")),
+            "description": clean(plan.get("description", "")),
+            "keywords": [clean(str(k)) for k in plan.get("keywords", [])][:7],
+            "chapters": []}
+    for i, ct in enumerate(chapters, 1):
+        print(f"Chapter {i}/{len(chapters)}: {ct}")
+        body = groq([
+            {"role": "system", "content": f"You write eBook chapters in {LANG_NAME}. Plain paragraphs only, no markdown, no headings."},
+            {"role": "user", "content":
+                f"eBook title: {book['title']}\nChapter {i}: {ct}\n"
+                f"Write about 600 words for this chapter in {LANG_NAME}. Use the script below only as the base idea; "
+                "add useful explanation and examples. Separate paragraphs with a blank line.\n\nSCRIPT:\n" + script}
+        ], max_tokens=4000)
+        book["chapters"].append({"title": clean(ct), "text": clean(body), "n": i})
+        time.sleep(3)
+    json.dump(book, open("work/book.json", "w", encoding="utf-8"), ensure_ascii=False)
+
+
+def chap_img(c):
+    n = c.get("n", 0)
+    p = f"work/img_ch{n}.jpg"
+    return p if n and os.path.exists(p) else None
+
+
+def pdf():
+    from weasyprint import HTML
+    book = json.load(open("work/book.json", encoding="utf-8"))
+    e = html.escape
+    font = {"hindi": "'Noto Sans Devanagari','Noto Serif Devanagari'",
+            "english": "'Noto Serif', serif",
+            "urdu": "'Noto Nastaliq Urdu','Noto Naskh Arabic'"}[LANG]
+    direction = "rtl" if LANG == "urdu" else "ltr"
+    lh = "2.4" if LANG == "urdu" else "1.8"
+    cover = ""
+    if os.path.exists("work/cover.jpg"):
+        cover = f'<div class="cover"><img src="file://{os.path.abspath("work/cover.jpg")}"></div>'
+    parts = [f"""<html dir="{direction}"><head><meta charset="utf-8"><style>
+@page {{ size: A5; margin: 18mm; }}
+@page cover {{ size: A5; margin: 0; }}
+body {{ font-family: {font}; font-size: 11pt; line-height: {lh}; }}
+.cover {{ page: cover; page-break-after: always; }}
+.cover img {{ width: 148mm; height: 210mm; }}
+.title {{ text-align: center; margin-top: 60mm; page-break-after: always; }}
+h1 {{ font-size: 24pt; }} h2 {{ font-size: 16pt; page-break-before: always; }}
+p {{ margin: 0 0 3mm 0; }}
+.ci {{ display: block; width: 100%; max-height: 85mm; object-fit: contain; margin: 0 auto 5mm auto; }}
+</style></head><body>{cover}
+<div class="title"><h1>{e(book['title'])}</h1><p>{e(book['subtitle'])}</p></div>"""]
+    for c in book["chapters"]:
+        parts.append(f"<h2>{e(c['title'])}</h2>")
+        ip = chap_img(c)
+        if ip:
+            parts.append(f'<img class="ci" src="file://{os.path.abspath(ip)}">')
+        for p in re.split(r"\n\s*\n", c["text"]):
+            if p.strip():
+                parts.append(f"<p>{e(p.strip())}</p>")
+    parts.append("</body></html>")
+    HTML(string="".join(parts), base_url=".").write_pdf("work/ebook.pdf")
+    print("PDF ban gayi:", os.path.getsize("work/ebook.pdf"), "bytes")
+    try:
+        epub()
+    except Exception as ex:
+        print("EPUB nahi bani (Gumroad par sirf PDF jayegi):", ex)
+
+
+def epub():
+    """KDP aur Google Play Books ke liye EPUB + cover + publish-info banata hai (covers/ folder mein)."""
+    from PIL import Image
+    book = json.load(open("work/book.json", encoding="utf-8"))
+    e = html.escape
+    rtl = LANG == "urdu"
+    now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+    has_cover = os.path.exists("work/cover.jpg")
+    kdp_cover = f"covers/{LANG}-kdp-cover.jpg"
+    if has_cover:
+        im = Image.open("work/cover.jpg").convert("RGB")
+        fit(im, 1600, 2560).save(kdp_cover, quality=92)
+
+    css = ("body{font-family:serif;line-height:1.7;direction:DIR;} "
+           "h1,h2{text-align:center;} p{margin:0 0 .8em 0;} "
+           "img{max-width:100%;height:auto;display:block;margin:0 auto 1em auto;}"
+           ).replace("DIR", "rtl" if rtl else "ltr")
+
+    def page(title, body):
+        return ('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html>'
+                '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" '
+                f'lang="{LANG_CODE}" xml:lang="{LANG_CODE}"><head><meta charset="utf-8"/>'
+                f'<title>{e(title)}</title><link rel="stylesheet" type="text/css" href="style.css"/>'
+                f'</head><body>{body}</body></html>')
+
+    pages = [("title", book["title"],
+              f"<h1>{e(book['title'])}</h1><p style='text-align:center'>{e(book['subtitle'])}</p>")]
+    imgs_used = []
+    for i, c in enumerate(book["chapters"], 1):
+        body = f"<h2>{e(c['title'])}</h2>"
+        ip = chap_img(c)
+        if ip:
+            body += f'<img src="img_ch{c["n"]}.jpg" alt=""/>'
+            imgs_used.append((c["n"], ip))
+        for p in re.split(r"\n\s*\n", c["text"]):
+            if p.strip():
+                body += f"<p>{e(p.strip())}</p>"
+        pages.append((f"ch{i}", c["title"], body))
+
+    nav_items = "".join(f'<li><a href="{pid}.xhtml">{e(t)}</a></li>' for pid, t, _ in pages)
+    nav = ('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html>'
+           '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" '
+           f'lang="{LANG_CODE}" xml:lang="{LANG_CODE}"><head><meta charset="utf-8"/><title>Contents</title></head>'
+           f'<body><nav epub:type="toc" id="toc"><ol>{nav_items}</ol></nav></body></html>')
+
+    manifest = ('<item id="css" href="style.css" media-type="text/css"/>'
+                '<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>')
+    if has_cover:
+        manifest += '<item id="cover" href="cover.jpg" media-type="image/jpeg" properties="cover-image"/>'
+    manifest += "".join(f'<item id="img{n}" href="img_ch{n}.jpg" media-type="image/jpeg"/>' for n, _ in imgs_used)
+    manifest += "".join(f'<item id="{pid}" href="{pid}.xhtml" media-type="application/xhtml+xml"/>'
+                        for pid, _, _ in pages)
+    spine = '<itemref idref="nav" linear="no"/>' + "".join(f'<itemref idref="{pid}"/>' for pid, _, _ in pages)
+    opf = ('<?xml version="1.0" encoding="utf-8"?>'
+           '<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid">'
+           '<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">'
+           f'<dc:identifier id="bookid">urn:uuid:{uuid.uuid4()}</dc:identifier>'
+           f'<dc:title>{e(book["title"])}</dc:title><dc:language>{LANG_CODE}</dc:language>'
+           f'<dc:creator>Dr. Sabir Hussain</dc:creator>'
+           f'<dc:description>{e(book["description"])}</dc:description>'
+           f'<meta property="dcterms:modified">{now}</meta></metadata>'
+           f'<manifest>{manifest}</manifest>'
+           f'<spine page-progression-direction="{"rtl" if rtl else "ltr"}">{spine}</spine></package>')
+    container = ('<?xml version="1.0"?><container version="1.0" '
+                 'xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles>'
+                 '<rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>'
+                 '</rootfiles></container>')
+
+    out = f"covers/{LANG}.epub"
+    with zipfile.ZipFile(out, "w") as z:
+        z.writestr("mimetype", "application/epub+zip", compress_type=zipfile.ZIP_STORED)
+        z.writestr("META-INF/container.xml", container, compress_type=zipfile.ZIP_DEFLATED)
+        z.writestr("OEBPS/content.opf", opf, compress_type=zipfile.ZIP_DEFLATED)
+        z.writestr("OEBPS/nav.xhtml", nav, compress_type=zipfile.ZIP_DEFLATED)
+        z.writestr("OEBPS/style.css", css, compress_type=zipfile.ZIP_DEFLATED)
+        for pid, t, body in pages:
+            z.writestr(f"OEBPS/{pid}.xhtml", page(t, body), compress_type=zipfile.ZIP_DEFLATED)
+        for n, ip in imgs_used:
+            z.write(ip, f"OEBPS/img_ch{n}.jpg", compress_type=zipfile.ZIP_DEFLATED)
+        if has_cover:
+            z.write(kdp_cover, "OEBPS/cover.jpg", compress_type=zipfile.ZIP_DEFLATED)
+
+    kdp_note = ("KDP par upload KARO (Hindi/English eBook)" if LANG != "urdu"
+                else "KDP Urdu support nahi karta - sirf Google Play Books par daalo")
+    info = (f"TITLE: {book['title']}\nSUBTITLE: {book['subtitle']}\nLANGUAGE: {LANG_NAME}\n"
+            f"KEYWORDS: {', '.join(book.get('keywords', []))}\n\nDESCRIPTION:\n{book['description']}\n\n"
+            f"FILES: {LANG}.epub (book), {LANG}-kdp-cover.jpg (cover 1600x2560)\n"
+            f"KDP: {kdp_note}\nGoogle Play Books: upload KARO\n")
+    open(f"covers/{LANG}-publish-info.txt", "w", encoding="utf-8").write(info)
+    print("EPUB + publish-info ban gayi (chapter images:", len(imgs_used), ") covers/ folder dekho")
+
+
+def gum_file(tok, api, path, filename):
+    """Ek file Gumroad par chadhata hai, uska file_url lautata hai."""
+    size = os.path.getsize(path)
+    r = requests.post(api + "/files/presign", data={
+        "access_token": tok, "filename": filename, "file_size": size}, timeout=60).json()
+    if not r.get("success"):
+        sys.exit("Gumroad presign fail: " + str(r))
+    data = open(path, "rb").read()
+    CH = 100 * 1024 * 1024
+    form = [("access_token", tok), ("upload_id", r["upload_id"]), ("key", r["key"])]
+    for p in r["parts"]:
+        n = p["part_number"]
+        pr = requests.put(p["presigned_url"], data=data[(n - 1) * CH:n * CH], timeout=300)
+        pr.raise_for_status()
+        form += [("parts[][part_number]", str(n)), ("parts[][etag]", pr.headers["ETag"])]
+    c = requests.post(api + "/files/complete", data=form, timeout=60).json()
+    print("File complete:", filename, "->", c.get("success"), "" if c.get("success") else c)
+    return c.get("file_url") or r["file_url"]
+
+
+def upload():
+    tok = os.environ["GUMROAD_TOKEN"]
+    api = "https://api.gumroad.com/v2"
+    book = json.load(open("work/book.json", encoding="utf-8"))
+
+    urls = [gum_file(tok, api, "work/ebook.pdf", f"{LANG}-ebook.pdf")]
+    if os.path.exists(f"covers/{LANG}.epub"):
+        try:
+            urls.append(gum_file(tok, api, f"covers/{LANG}.epub", f"{LANG}-ebook.epub"))
+        except BaseException as ex:
+            print("EPUB Gumroad par nahi gayi, sirf PDF jayegi:", ex)
+    print("Files ready:", len(urls))
+
+    chapters = "".join("<li>" + html.escape(c["title"]) + "</li>" for c in book["chapters"])
+    desc = ("<p><strong>" + html.escape(book["subtitle"]) + "</strong></p>"
+            "<p>" + html.escape(book["description"]) + "</p>"
+            "<ul>" + chapters + "</ul>")
+    if book.get("keywords"):
+        desc += "<p>" + html.escape(", ".join(book["keywords"])) + "</p>"
+
+    prod = None
+    for ntype in ("ebook", "digital"):
+        data = [("access_token", tok), ("native_type", ntype), ("name", book["title"][:200]),
+                ("description", desc), ("price", PRICE_CENTS), ("price_currency_type", "usd")]
+        data += [("files[][url]", u) for u in urls]
+        pr = requests.post(api + "/products", data=data, timeout=60).json()
+        if pr.get("success"):
+            prod = pr["product"]
+            break
+        print("Product create fail:", ntype, pr)
+    if not prod:
+        sys.exit("Gumroad product nahi bana. Upar ka error dekho.")
+    pid = prod["id"]
+    print("Product bana:", pid, "| title:", book["title"])
+
+    # Check: file sach mein judi? Na judi to update se dobara try
+    time.sleep(3)
+    chk = requests.get(f"{api}/products/{pid}", params={"access_token": tok}, timeout=60).json()
+    nfiles = len((chk.get("product") or {}).get("files") or [])
+    print("Product mein files:", nfiles)
+    if nfiles == 0:
+        up = [("access_token", tok)] + [("files[][url]", u) for u in urls]
+        ur = requests.put(f"{api}/products/{pid}", data=up, timeout=60).json()
+        print("Files dobara jodne ki koshish:", ur.get("success"), "" if ur.get("success") else ur)
+        chk = requests.get(f"{api}/products/{pid}", params={"access_token": tok}, timeout=60).json()
+        nfiles = len((chk.get("product") or {}).get("files") or [])
+        print("Ab product mein files:", nfiles)
+        if nfiles == 0:
+            print("WARNING: file attach nahi hui. Gumroad mein Content tab mein haath se daalo:",
+                  "Actions > 'PDF backup' artifact ya covers/ folder mein", f"{LANG}.epub")
+
+    # Cover (square) - Gumroad iska thumbnail bhi isi se banata hai
+    if os.path.exists(f"covers/{LANG}.jpg"):
+        repo = os.environ.get("GITHUB_REPOSITORY", "")
+        url = f"https://raw.githubusercontent.com/{repo}/main/covers/{LANG}.jpg"
+        time.sleep(8)
+        cr = requests.post(f"{api}/products/{pid}/covers", data={"access_token": tok, "url": url}, timeout=60).json()
+        print("Cover:", cr.get("success"), "" if cr.get("success") else cr)
+
+    if CTA:
+        try:
+            ur = requests.put(f"{api}/products/{pid}", data={
+                "access_token": tok, "call_to_action": CTA}, timeout=60).json()
+            print("Call to action:", ur.get("success"), "" if ur.get("success") else ur)
+        except Exception as ex:
+            print("Call to action set nahi hua:", ex)
+
+    if os.environ.get("EB_PUBLISH", "false").lower() == "true":
+        er = requests.put(f"{api}/products/{pid}/enable", data={"access_token": tok}, timeout=60).json()
+        print("Publish:", er.get("success"))
+    else:
+        dr = requests.put(f"{api}/products/{pid}/disable", data={"access_token": tok}, timeout=60).json()
+        if dr.get("success"):
+            print("Draft/Unpublished kar diya. Gumroad mein jaake dekho aur publish karo.")
+        else:
+            print("WARNING: draft nahi ban paya, product LIVE ho sakta hai! Gumroad mein jaake Unpublish karo.", dr)
+    print("Product link:", prod.get("short_url"))
+
+
+{"fetch": fetch, "write": write, "pdf": pdf, "upload": upload}[sys.argv[1]]()
