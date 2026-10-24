@@ -1,0 +1,11 @@
+TITLE: ہیلو دوستو۔
+SUBTITLE: Dr. Sabir Hussain
+LANGUAGE: Urdu (Urdu script, right to left)
+KEYWORDS: مالی آزادی, سرمایہ کاری, کمپاؤنڈ گروتھ, اثاثے, قرض, ہنگامی فنڈ, مالی منصوبہ بندی
+
+DESCRIPTION:
+یہ کتاب آپ کو سادہ زبان میں سکھاتی ہے کہ کیسے آمدنی کے علاوہ اثاثے بنائیں، کمپاؤنڈ گروتھ سے فائدہ اٹھائیں اور مالی آزادی حاصل کریں۔ حقیقی مثالوں اور عملی مشوروں کے ساتھ، آپ کو سرمایہ کاری، قرض اور ہنگامی فنڈ کے اہم پہلوؤں سے روشناس کراتی ہے۔
+
+FILES: urdu.epub (book), urdu-kdp-cover.jpg (cover 1600x2560)
+KDP: KDP Urdu support nahi karta - sirf Google Play Books par daalo
+Google Play Books: upload KARO
