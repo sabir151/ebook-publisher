@@ -22,9 +22,14 @@ def drive():
     return build("drive", "v3", credentials=creds, cache_discovery=False)
 
 
-def download(d, f):
+def download(d, f, md=False):
     from googleapiclient.http import MediaIoBaseDownload
     if f["mimeType"] == "application/vnd.google-apps.document":
+        if md:
+            try:
+                return d.files().export_media(fileId=f["id"], mimeType="text/markdown").execute()
+            except Exception:
+                pass
         return d.files().export_media(fileId=f["id"], mimeType="text/plain").execute()
     buf = io.BytesIO()
     dl = MediaIoBaseDownload(buf, d.files().get_media(fileId=f["id"]))
@@ -74,7 +79,7 @@ def fetch():
     if mds:
         t = mds[0]
         print("eBook file (md):", t["name"])
-        text = to_text(download(d, t))
+        text = to_text(download(d, t, md=True))
         if len(text) < 200:
             sys.exit("md file khali ya bahut chhoti hai")
         open("work/ebook.md", "w", encoding="utf-8").write(text)
@@ -93,9 +98,7 @@ def fetch():
         from PIL import Image
         print("Cover file:", imgs[0]["name"])
         im = Image.open(io.BytesIO(download(d, imgs[0]))).convert("RGB")
-        # PDF ke pehle page ke liye (A5 portrait) - bina kate
         fit(im, 1480, 2100).save("work/cover.jpg", quality=90)
-        # Gumroad cover/thumbnail ke liye (square, 600x600) - bina kate
         fit(im, 600, 600).save(f"covers/{LANG}.jpg", quality=92)
     else:
         print("WARNING: is language ki thumbnail/image nahi mili, bina cover ke banega")
@@ -145,6 +148,12 @@ def parse_json(s):
         raise
 
 
+SKIP_TITLES = ("विषय-सूची", "विषय सूची", "विषय-सुची", "table of contents", "contents",
+               "فہرست", "فہرستِ مضامین", "مضامین")
+SKIP_LINES = ("समाप्त", "the end", "end", "ختم", "اختتام")
+CHAPTER_RE = re.compile(r"^(अध्याय|chapter|باب|فصل)\s*[\d०-९]+\s*[:.\-–—]?", re.I)
+
+
 def md_to_book(text):
     """Markdown ko title + chapters mein todta hai."""
     text = re.sub(r"```.*?```", "", text.replace("\r", ""), flags=re.S)
@@ -163,16 +172,20 @@ def md_to_book(text):
     chapters = []
     pre = []
     buf = []
+    skipping = False
 
     def add(p):
         p = inline(p)
-        if p:
+        if p and not skipping:
             (chapters[-1]["paras"] if chapters else pre).append(p)
 
     def flush():
         if buf:
             add(" ".join(buf))
             del buf[:]
+
+    def is_skip_title(h):
+        return h.strip().strip(":").lower() in SKIP_TITLES
 
     for raw in text.split("\n"):
         line = raw.strip()
@@ -182,14 +195,27 @@ def md_to_book(text):
         if re.match(r"^(-{3,}|\*{3,}|_{3,})$", line):
             flush()
             continue
-        m = re.match(r"^(#{1,6})\s+(.+?)\s*#*$", line)
-        if m:
+        if inline(line).strip(" .।").lower() in SKIP_LINES:
             flush()
+            continue
+        m = re.match(r"^(#{1,6})\s+(.+?)\s*#*$", line)
+        h = None
+        lvl = 2
+        if m:
             lvl, h = len(m.group(1)), inline(m.group(2))
+        elif CHAPTER_RE.match(inline(line)) and len(line) < 200:
+            h = inline(line)
+        if h is not None:
+            flush()
             if title is None and lvl == 1 and not chapters:
                 title = h
+                skipping = False
             elif lvl <= 2:
-                chapters.append({"title": h, "paras": []})
+                if is_skip_title(h):
+                    skipping = True
+                else:
+                    skipping = False
+                    chapters.append({"title": h, "paras": []})
             else:
                 add(h)
             continue
@@ -218,9 +244,8 @@ def md_to_book(text):
             title = pre.pop(0)[:120]
         else:
             sys.exit("md file mein kuch likha hua nahi mila")
-    subtitle = ""
-    if pre and chapters and len(" ".join(pre)) < 200:
-        subtitle = " ".join(pre)
+    # title ke baad ki chhoti line (jaise author naam) ko chhod dete hain
+    if chapters and pre and len(" ".join(pre)) < 120:
         pre = []
     if not chapters:
         chapters = [{"title": title, "paras": pre}]
@@ -229,31 +254,35 @@ def md_to_book(text):
     out = [{"title": c["title"], "text": "\n\n".join(c["paras"])} for c in chapters if c["paras"]]
     if not out:
         sys.exit("md file mein chapters ka text nahi mila")
-    return {"title": title, "subtitle": subtitle, "description": "", "keywords": [], "chapters": out}
+    return {"title": title, "subtitle": "", "description": "", "keywords": [], "chapters": out}
 
 
 def write():
     if os.path.exists("work/ebook.md"):
         book = md_to_book(open("work/ebook.md", encoding="utf-8").read())
-        body = " ".join(c["text"] for c in book["chapters"])[:3000]
+        old_title = book["title"]
+        body = " ".join(c["text"] for c in book["chapters"])[:4000]
+        chap_list = "; ".join(c["title"] for c in book["chapters"])
         book["description"] = body[:300]
         try:
             out = groq([
-                {"role": "system", "content": "You are an eBook marketer. Reply only with JSON."},
+                {"role": "system", "content": "You are an expert eBook marketer and SEO writer. Reply only with JSON."},
                 {"role": "user", "content":
-                    f"eBook title: {book['title']}\nLanguage: {LANG_NAME}\n"
-                    'Return JSON: {"subtitle": "short subtitle", "description": "2-3 sentence sales description", '
-                    '"keywords": ["7 short search keywords"]}. All text in the same language as the eBook.\n\n'
-                    "EBOOK TEXT:\n" + body}
-            ], max_tokens=1500, json_mode=True)
+                    f"Language of the eBook: {LANG_NAME}. Current working title: {old_title}\n"
+                    f"Chapters: {chap_list}\n"
+                    "Write a strong, searchable, benefit-focused SEO title for this eBook (max 70 characters), "
+                    "a short subtitle, a 3-4 sentence sales description, and 7 search keywords. "
+                    'Return JSON: {"title": "...", "subtitle": "...", "description": "...", "keywords": ["..."]}. '
+                    "All text must be in the same language as the eBook.\n\nEBOOK TEXT:\n" + body}
+            ], max_tokens=1800, json_mode=True)
             meta = parse_json(out)
+            book["title"] = clean(meta.get("title", "")) or old_title
+            book["subtitle"] = clean(meta.get("subtitle", ""))
             book["description"] = clean(meta.get("description", "")) or book["description"]
-            if not book["subtitle"]:
-                book["subtitle"] = clean(meta.get("subtitle", ""))
             book["keywords"] = [clean(str(k)) for k in meta.get("keywords", [])][:7]
         except (Exception, SystemExit) as ex:
-            print("Description/keywords Groq se nahi bane, simple wala use kiya:", ex)
-        print("md se eBook tayyar:", book["title"], "-", len(book["chapters"]), "chapters")
+            print("SEO Groq se nahi bana, file ka title use kiya:", ex)
+        print("eBook title:", book["title"], "-", len(book["chapters"]), "chapters")
         json.dump(book, open("work/book.json", "w", encoding="utf-8"), ensure_ascii=False)
         return
 
@@ -321,7 +350,7 @@ p {{ margin: 0 0 3mm 0; }}
     try:
         epub()
     except Exception as ex:
-        print("EPUB nahi bani (Gumroad upload par asar nahi):", ex)
+        print("EPUB nahi bani (Gumroad par sirf PDF jayegi):", ex)
 
 
 def epub():
@@ -407,14 +436,11 @@ def epub():
     print("EPUB + publish-info ban gayi: covers/ folder dekho")
 
 
-def upload():
-    tok = os.environ["GUMROAD_TOKEN"]
-    api = "https://api.gumroad.com/v2"
-    book = json.load(open("work/book.json", encoding="utf-8"))
-    path = "work/ebook.pdf"
+def gum_file(tok, api, path, filename):
+    """Ek file Gumroad par chadhata hai, uska file_url lautata hai."""
     size = os.path.getsize(path)
     r = requests.post(api + "/files/presign", data={
-        "access_token": tok, "filename": f"{LANG}-ebook.pdf", "file_size": size}, timeout=60).json()
+        "access_token": tok, "filename": filename, "file_size": size}, timeout=60).json()
     if not r.get("success"):
         sys.exit("Gumroad presign fail: " + str(r))
     data = open(path, "rb").read()
@@ -426,14 +452,36 @@ def upload():
         pr.raise_for_status()
         form += [("parts[][part_number]", str(n)), ("parts[][etag]", pr.headers["ETag"])]
     c = requests.post(api + "/files/complete", data=form, timeout=60).json()
-    file_url = c.get("file_url") or r["file_url"]
-    desc = "<p>" + html.escape(book["description"]) + "</p>"
+    print("File complete:", filename, "->", c.get("success"), "" if c.get("success") else c)
+    return c.get("file_url") or r["file_url"]
+
+
+def upload():
+    tok = os.environ["GUMROAD_TOKEN"]
+    api = "https://api.gumroad.com/v2"
+    book = json.load(open("work/book.json", encoding="utf-8"))
+
+    urls = [gum_file(tok, api, "work/ebook.pdf", f"{LANG}-ebook.pdf")]
+    if os.path.exists(f"covers/{LANG}.epub"):
+        try:
+            urls.append(gum_file(tok, api, f"covers/{LANG}.epub", f"{LANG}-ebook.epub"))
+        except BaseException as ex:
+            print("EPUB Gumroad par nahi gayi, sirf PDF jayegi:", ex)
+    print("Files ready:", len(urls))
+
+    chapters = "".join("<li>" + html.escape(c["title"]) + "</li>" for c in book["chapters"])
+    desc = ("<p><strong>" + html.escape(book["subtitle"]) + "</strong></p>"
+            "<p>" + html.escape(book["description"]) + "</p>"
+            "<ul>" + chapters + "</ul>")
+    if book.get("keywords"):
+        desc += "<p>" + html.escape(", ".join(book["keywords"])) + "</p>"
+
     prod = None
     for ntype in ("ebook", "digital"):
-        pr = requests.post(api + "/products", data=[
-            ("access_token", tok), ("native_type", ntype), ("name", book["title"][:200]),
-            ("description", desc), ("price", PRICE_CENTS), ("price_currency_type", "usd"),
-            ("files[][url]", file_url)], timeout=60).json()
+        data = [("access_token", tok), ("native_type", ntype), ("name", book["title"][:200]),
+                ("description", desc), ("price", PRICE_CENTS), ("price_currency_type", "usd")]
+        data += [("files[][url]", u) for u in urls]
+        pr = requests.post(api + "/products", data=data, timeout=60).json()
         if pr.get("success"):
             prod = pr["product"]
             break
@@ -441,6 +489,23 @@ def upload():
     if not prod:
         sys.exit("Gumroad product nahi bana. Upar ka error dekho.")
     pid = prod["id"]
+    print("Product bana:", pid, "| title:", book["title"])
+
+    # Check: file sach mein judi? Na judi to update se dobara try
+    time.sleep(3)
+    chk = requests.get(f"{api}/products/{pid}", params={"access_token": tok}, timeout=60).json()
+    nfiles = len((chk.get("product") or {}).get("files") or [])
+    print("Product mein files:", nfiles)
+    if nfiles == 0:
+        up = [("access_token", tok)] + [("files[][url]", u) for u in urls]
+        ur = requests.put(f"{api}/products/{pid}", data=up, timeout=60).json()
+        print("Files dobara jodne ki koshish:", ur.get("success"), "" if ur.get("success") else ur)
+        chk = requests.get(f"{api}/products/{pid}", params={"access_token": tok}, timeout=60).json()
+        nfiles = len((chk.get("product") or {}).get("files") or [])
+        print("Ab product mein files:", nfiles)
+        if nfiles == 0:
+            print("WARNING: file attach nahi hui. Gumroad mein Content tab mein ye file haath se daalo:",
+                  "Actions > 'PDF backup' artifact ya covers/ folder mein", f"{LANG}.epub")
 
     # Cover (square) - Gumroad iska thumbnail bhi isi se banata hai
     if os.path.exists(f"covers/{LANG}.jpg"):
@@ -450,7 +515,6 @@ def upload():
         cr = requests.post(f"{api}/products/{pid}/covers", data={"access_token": tok, "url": url}, timeout=60).json()
         print("Cover:", cr.get("success"), "" if cr.get("success") else cr)
 
-    # Call to action (best-effort: Gumroad API ye support na kare to haath se badalna hoga)
     if CTA:
         try:
             ur = requests.put(f"{api}/products/{pid}", data={
@@ -459,7 +523,6 @@ def upload():
         except Exception as ex:
             print("Call to action set nahi hua:", ex)
 
-    # Publish ya draft - gumroad naya product apne aap live kar deta hai, isliye draft ke liye disable zaroori hai
     if os.environ.get("EB_PUBLISH", "false").lower() == "true":
         er = requests.put(f"{api}/products/{pid}/enable", data={"access_token": tok}, timeout=60).json()
         print("Publish:", er.get("success"))
