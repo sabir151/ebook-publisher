@@ -1,34 +1,33 @@
-=== GOOGLE PLAY BOOKS SEO: Hidden History of Neural Architecture Search Revealed (English) ===
+=== GOOGLE PLAY BOOKS SEO: Hidden History of Neural Architecture Search: From 1980s Genetics to Modern AI (English) ===
 Website: play.google.com/books/publish > Book catalog
 Files (GitHub repo ke covers/ folder se):
   Book  : english.epub  (ya english.pdf)
   Cover : english-kdp-cover.jpg  (ya english.jpg)
 Har field mein neeche ka text seedha copy-paste karo.
 
-Title      : Hidden History of Neural Architecture Search Revealed
-Subtitle   : From 1980s Genetics to Modern AutoML Breakthroughs
+Title      : Hidden History of Neural Architecture Search: From 1980s Genetics to Modern AI
+Subtitle   : Discover the untold origins and evolution of NAS techniques
 Author     : Dr. Sabir Hussain
 Publisher  : Dr. Sabir Hussain
 Language   : English
 
 Subjects (BISAC, dropdown mein sabse milta-julta chuno):
   1. COMPUTERS / Artificial Intelligence
-  2. COMPUTERS / Machine Learning
-  3. BUSINESS & ECONOMICS / Entrepreneurship / General
+  2. SCIENCE / Computer Science / Machine Learning
+  3. EDUCATION / Curriculum & Instruction / Technology
 
 Short hook (preview aur social share ke liye):
-Uncover the hidden roots of Neural Architecture Search, from 1980s genetics to today's AutoML breakthroughs.
+Uncover the hidden roots of Neural Architecture Search, from 1980s genetics to today's AI breakthroughs.
 
 Description (plain text, seedha paste karo):
-Discover the untold story of Neural Architecture Search (NAS) and how it reshaped AI.
-This book traces NAS from its genetic algorithm origins in the 1980s, through evolutionary breakthroughs, hardware‑aware designs, and label‑free AutoML‑Zero, to the modern reinforcement‑learning boom.
-• Learn the true timeline – why the 2017 hype was built on decades of hidden work.
-• Compare methods – evolutionary NAS, ENAS, Efficient‑NAS, and why some claims fell short.
-• Understand hardware impact – how device constraints drive architecture choices.
-• Explore label‑free AutoML‑Zero – self‑evolving models without human‑crafted data.
-• Gain practical insights – key lessons for researchers and engineers building next‑gen models.
-Whether you’re a student, researcher, or AI enthusiast, this concise guide equips you with the context and knowledge to navigate the fast‑moving NAS landscape.
-Start reading now and master the hidden history that powers today’s AI breakthroughs!
+Discover the untold origins of Neural Architecture Search (NAS) and how it shaped modern AI.
+This book reveals the forgotten milestones that predate the 2017 hype, tracing the journey from early genetic algorithms to cutting‑edge AutoML‑Zero.
+• Learn the true timeline: 1980s genetic experiments, NEAT, Bayesian optimization, and the Zoph & Le RL breakthrough.
+• Understand why early methods were computationally costly and how Efficient‑NAS attempted (and often failed) to solve the problem.
+• Explore hardware‑aware and label‑free NAS strategies that push performance on single devices.
+• Gain practical insights for researchers and engineers seeking efficient, reproducible NAS pipelines.
+Whether you are a student, researcher, or AI enthusiast, this concise history equips you with the context needed to innovate responsibly.
+Grab your copy now and master the foundations that power today’s AI breakthroughs!
 
 Search ke liye keywords (Google Books mein alag keyword box nahi hota, inme se kuch words description mein rakhna behtar hai):
   1. neural architecture search history
@@ -37,7 +36,7 @@ Search ke liye keywords (Google Books mein alag keyword box nahi hota, inme se k
   4. hardware aware NAS guide
   5. label free neural search
   6. efficient NAS vs random
-  7. reinforcement learning NAS 2017
+  7. reinforcement learning NAS origins
 
 Upload se pehle checks:
   1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?

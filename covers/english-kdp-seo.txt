@@ -1,4 +1,4 @@
-=== AMAZON KDP SEO: Hidden History of Neural Architecture Search Revealed (English) ===
+=== AMAZON KDP SEO: Hidden History of Neural Architecture Search: From 1980s Genetics to Modern AI (English) ===
 Website: kdp.amazon.com > Create > Kindle eBook
 Files (GitHub repo ke covers/ folder se):
   Manuscript : english.epub
@@ -7,8 +7,8 @@ Har field mein neeche ka text seedha copy-paste karo.
 
 Language dropdown mein apni language dikhe tabhi KDP par daalo; na dikhe to sirf Google Play Books.
 
-Title      : Hidden History of Neural Architecture Search Revealed
-Subtitle   : From 1980s Genetics to Modern AutoML Breakthroughs
+Title      : Hidden History of Neural Architecture Search: From 1980s Genetics to Modern AI
+Subtitle   : Discover the untold origins and evolution of NAS techniques
 Author     : Dr. Sabir Hussain
 Publishing rights: I own the copyright
 AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP upload mein ye sawal aata hai, sach jawab do)
@@ -20,15 +20,15 @@ Keywords (7 alag-alag boxes mein, ek ek karke):
   4. hardware aware NAS guide
   5. label free neural search
   6. efficient NAS vs random
-  7. reinforcement learning NAS 2017
+  7. reinforcement learning NAS origins
 
 Categories (3 tak, KDP ke dropdown mein sabse milta-julta chuno):
   1. Computers & Technology > Artificial Intelligence
   2. Science & Math > Computer Science > Machine Learning
-  3. Business & Money > Entrepreneurship > Startups
+  3. Education & Teaching > Curriculum & Instruction > Technology
 
 Description (HTML sahit paste karo):
-<p><b>Discover the untold story of Neural Architecture Search (NAS) and how it reshaped AI.</b></p><p>This book traces NAS from its genetic algorithm origins in the 1980s, through evolutionary breakthroughs, hardware‑aware designs, and label‑free AutoML‑Zero, to the modern reinforcement‑learning boom.</p><ul><li><i>Learn the true timeline</i> – why the 2017 hype was built on decades of hidden work.</li><li><i>Compare methods</i> – evolutionary NAS, ENAS, Efficient‑NAS, and why some claims fell short.</li><li><i>Understand hardware impact</i> – how device constraints drive architecture choices.</li><li><i>Explore label‑free AutoML‑Zero</i> – self‑evolving models without human‑crafted data.</li><li><i>Gain practical insights</i> – key lessons for researchers and engineers building next‑gen models.</li></ul><p>Whether you’re a student, researcher, or AI enthusiast, this concise guide equips you with the context and knowledge to navigate the fast‑moving NAS landscape.</p><p><b>Start reading now and master the hidden history that powers today’s AI breakthroughs!</b></p>
+<p><b>Discover the untold origins of Neural Architecture Search (NAS) and how it shaped modern AI.</b></p><p>This book reveals the forgotten milestones that predate the 2017 hype, tracing the journey from early genetic algorithms to cutting‑edge AutoML‑Zero.</p><ul><li><i>Learn the true timeline:</i> 1980s genetic experiments, NEAT, Bayesian optimization, and the Zoph &amp; Le RL breakthrough.</li><li><i>Understand why early methods were computationally costly</i> and how Efficient‑NAS attempted (and often failed) to solve the problem.</li><li><i>Explore hardware‑aware and label‑free NAS</i> strategies that push performance on single devices.</li><li><i>Gain practical insights</i> for researchers and engineers seeking efficient, reproducible NAS pipelines.</li></ul><p>Whether you are a student, researcher, or AI enthusiast, this concise history equips you with the context needed to innovate responsibly.</p><p><b>Grab your copy now and master the foundations that power today’s AI breakthroughs!</b></p>
 
 KDP Select : ENROLL MAT KARO (Select mein ebook sirf Amazon par rakhni padti hai, aapki Gumroad par bhi hai)
 Price      : KDP 70% royalty tabhi deta hai jab price $2.99 se $9.99 ke beech ho. Sab jagah ek hi price rakhna safe hai.
