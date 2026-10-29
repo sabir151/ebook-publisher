@@ -8,7 +8,7 @@ Har field mein neeche ka text seedha copy-paste karo.
 Language dropdown mein apni language dikhe tabhi KDP par daalo; na dikhe to sirf Google Play Books.
 
 Title      : न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी: इतिहास और भविष्य
-Subtitle   : जीनिक एल्गोरिद्म से ऑटोएमएल ज़ीरो तक का सफ़र
+Subtitle   : जीनिक एल्गोरिद्म से ऑटोएमएल‑ज़ीरो तक का सफर
 Author     : Dr. Sabir Hussain
 Publishing rights: I own the copyright
 AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP upload mein ye sawal aata hai, sach jawab do)
@@ -16,19 +16,19 @@ AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP up
 Keywords (7 alag-alag boxes mein, ek ek karke):
   1. न्यूरल आर्किटेक्चर सर्च इतिहास
   2. ऑटोएमएल ज़ीरो यात्रा
-  3. इवोल्यूशनरी NAS समझें
-  4. हार्डवेयर‑अवेयर NAS टिप्स
-  5. लेबल‑रहित NAS तकनीक
-  6. NAS थर्मल सीमाएँ
-  7. NAS का 1900‑2017 इतिहास
+  3. इवोल्यूशनरी NAS तकनीक
+  4. हार्डवेयर‑अवेयर NAS सच्चाई
+  5. लेबल‑रहित NAS प्रीटेक्स्ट
+  6. थर्मल सीमाएँ और NAS
+  7. NAS का 1900‑से 2017 इतिहास
 
 Categories (3 tak, KDP ke dropdown mein sabse milta-julta chuno):
   1. Science & Math > Computer Science > Artificial Intelligence
-  2. Technology > Programming > Machine Learning
-  3. Education & Teaching > Reference > Technical
+  2. Technology & Engineering > Computer Science > Machine Learning
+  3. Education & Teaching > Higher Education > Computer Science
 
 Description (HTML sahit paste karo):
-<p><b>न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी—इतिहास से भविष्य तक का पूर्ण मार्गदर्शक!</b></p><p>यह पुस्तक आपको दिखाती है कि कैसे 1990 के दशक की शुरुआती प्रयोगशालाओं से लेकर 2020 के ऑटोएमएल ज़ीरो तक, NAS तकनीक ने विज्ञान को बदल दिया।</p><ul><li><b>इतिहास का गहन विश्लेषण:</b> शुरुआती जीनिक एल्गोरिद्म से लेकर रीइन्फोर्समेंट लर्निंग बूम तक।</li><li><b>तकनीकी अंतर्दृष्टि:</b> हार्डवेयर‑अवेयर NAS, लेबल‑रहित प्रीटेक्स्ट विधियाँ और थर्मल सीमाओं का विस्तृत विवरण।</li><li><b>व्यावहारिक लाभ:</b> आधुनिक AI सिस्टम में NAS को प्रभावी ढंग से लागू करने के टिप्स।</li><li><b>भविष्य की दिशा:</b> ऑटोएमएल ज़ीरो और आगे के संभावित विकास पर विचार।</li></ul><p>चाहे आप शोधकर्ता हों, छात्र हों या AI उत्साही, यह पुस्तक आपके ज्ञान को नई ऊँचाइयों तक ले जाएगी।<br><b>अभी पढ़ना शुरू करें और NAS की गहरी समझ प्राप्त करें!</b></p>
+<p><b>न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी</b>—इतिहास के गहराई से लेकर ऑटोएमएल‑ज़ीरो तक, इस पुस्तक में आप पाएँगे AI के विकास के अनछुए पहलू।</p><p>इस पुस्तक से आप प्राप्त करेंगे:</p><ul><li>NAS के शुरुआती जड़ों और उनके प्रयोगों की विस्तृत समझ।</li><li>इवोल्यूशनरी NAS और ऑटोएमएल‑ज़ीरो के बीच के अंतर को स्पष्ट करने वाला विश्लेषण।</li><li>हार्डवेयर‑अवेयर NAS की वास्तविक प्रभावशीलता और सीमाओं का खुलासा।</li><li>लेबल‑रहित NAS के प्रीटेक्स्ट‑आधारित लाभों की गहरी जानकारी।</li><li>थर्मल सीमाओं और हार्डवेयर संघर्षों के समाधान के लिए रणनीतियाँ।</li><li>1900‑से 2017 तक NAS के विकास का समग्र टाइमलाइन।</li></ul><p>चाहे आप शोधकर्ता हों, छात्र हों या AI उत्साही, यह पुस्तक आपके ज्ञान को नई ऊँचाइयों तक ले जाएगी।</p><p><i>आज ही डाउनलोड करें और AI के भविष्य को समझने का पहला कदम रखें!</i></p>
 
 KDP Select : ENROLL MAT KARO (Select mein ebook sirf Amazon par rakhni padti hai, aapki Gumroad par bhi hai)
 Price      : KDP 70% royalty tabhi deta hai jab price $2.99 se $9.99 ke beech ho. Sab jagah ek hi price rakhna safe hai.
