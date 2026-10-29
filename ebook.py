@@ -114,21 +114,24 @@ def fetch():
     cover_f, chs = None, {}
     for f in list_all_images(d):
         nm = f["name"].lower()
-        if cover_f is None and re.match(rf"^{LANG}_cover\.(jpg|jpeg|png|webp)$", nm):
+        if cover_f is None and re.match(rf"^{LANG}[ _\-]?cover.*\.(jpg|jpeg|png|webp)$", nm):
             cover_f = f
         m = re.match(rf"^{LANG}_ch(\d+)\.(jpg|jpeg|png|webp)$", nm)
         if m and int(m.group(1)) not in chs:
             chs[int(m.group(1))] = f
-    if cover_f is None and old_imgs:
-        cover_f = old_imgs[0]
+    if cover_f is None:
+        # fallback mein chapter image kabhi cover nahi banegi
+        for f in old_imgs:
+            if not re.search(r"_ch\d+\.", f["name"].lower()):
+                cover_f = f
+                break
+    if cover_f is None:
+        sys.exit(f"{LANG}_cover.jpg Drive mein nahi mili. Cover ka naam {LANG}_cover.jpg rakho aur folder service account ko share karo.")
 
-    if cover_f:
-        print("Cover file:", cover_f["name"])
-        im = Image.open(io.BytesIO(download(d, cover_f))).convert("RGB")
-        fit(im, 1480, 2100).save("work/cover.jpg", quality=90)
-        fit(im, 600, 600).save(f"covers/{LANG}.jpg", quality=92)
-    else:
-        print("WARNING: cover image nahi mili ({}_cover.jpg), bina cover ke banega".format(LANG))
+    print("Cover file:", cover_f["name"])
+    im = Image.open(io.BytesIO(download(d, cover_f))).convert("RGB")
+    fit(im, 1480, 2100).save("work/cover.jpg", quality=90)
+    fit(im, 600, 600).save(f"covers/{LANG}.jpg", quality=92)
 
     for n, f in sorted(chs.items()):
         try:
@@ -713,6 +716,8 @@ def gum_file(tok, api, path, filename):
         form += [("parts[][part_number]", str(n)), ("parts[][etag]", pr.headers["ETag"])]
     c = requests.post(api + "/files/complete", data=form, timeout=60).json()
     print("File complete:", filename, "->", c.get("success"), "" if c.get("success") else c)
+    if not c.get("success"):
+        sys.exit("Gumroad file complete fail: " + str(c))
     return c.get("file_url") or r["file_url"]
 
 
