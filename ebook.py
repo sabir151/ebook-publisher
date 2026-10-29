@@ -1,4 +1,4 @@
-import os, sys, io, json, re, time, html, zipfile, uuid, requests
+import os, sys, io, json, re, time, html, zipfile, uuid, shutil, requests
 
 LANG = os.environ.get("EB_LANG", "").strip().lower()
 if LANG not in ("hindi", "english", "urdu"):
@@ -405,6 +405,12 @@ p {{ margin: 0 0 3mm 0; }}
     parts.append("</body></html>")
     HTML(string="".join(parts), base_url=".").write_pdf("work/ebook.pdf")
     print("PDF ban gayi:", os.path.getsize("work/ebook.pdf"), "bytes")
+    # KDP / Google Play ke liye PDF ki copy covers/ folder mein
+    try:
+        shutil.copyfile("work/ebook.pdf", f"covers/{LANG}.pdf")
+        print(f"PDF covers/{LANG}.pdf mein bhi save ki")
+    except Exception as ex:
+        print("PDF covers/ mein copy nahi hui:", ex)
     try:
         epub()
     except Exception as ex:
@@ -502,7 +508,192 @@ def epub():
             f"KDP: {kdp_note}\nGoogle Play Books: upload KARO\n")
     open(f"covers/{LANG}-publish-info.txt", "w", encoding="utf-8").write(info)
     print("EPUB + publish-info ban gayi (chapter images:", len(imgs_used), ") covers/ folder dekho")
-       __import__("publish_pack").safe_run(LANG, LANG_NAME, LANG_CODE, groq)
+
+    # KDP aur Google Books ke alag-alag complete SEO files (fail ho to baaki kaam nahi rukta)
+    try:
+        make_seo_packs(book)
+    except BaseException as ex:  # groq() sys.exit bhi kar sakta hai
+        print("SEO files nahi bani (ePub aur PDF theek hain):", ex)
+
+
+# ---------------------------------------------------------------------------
+# KDP aur Google Play Books ke liye alag-alag complete SEO
+# ---------------------------------------------------------------------------
+def _clip(s, n):
+    s = re.sub(r"\s+", " ", str(s or "")).strip()
+    return s[:n].rstrip()
+
+
+def _html_to_text(h):
+    h = re.sub(r"(?i)<br\s*/?>|</p>|</li>|</h\d>", "\n", h)
+    h = re.sub(r"(?i)<li[^>]*>", "• ", h)
+    h = re.sub(r"<[^>]+>", "", h)
+    h = html.unescape(h)
+    return re.sub(r"\n{3,}", "\n\n", h).strip()
+
+
+def _ai_platform_meta(book):
+    chap = "; ".join(c["title"] for c in book["chapters"])[:1500]
+    body = " ".join(c["text"] for c in book["chapters"])[:3500]
+    out = groq([
+        {"role": "system",
+         "content": "You are an expert Amazon KDP and Google Play Books SEO specialist. Reply only with JSON."},
+        {"role": "user", "content":
+            f"eBook language: {LANG_NAME}. Title: {book['title']}. Subtitle: {book.get('subtitle', '')}.\n"
+            f"Chapters: {chap}\n"
+            "Return JSON with these keys:\n"
+            "kdp_keywords: exactly 7 search phrases a reader would type, each max 50 characters, "
+            "in the eBook's language.\n"
+            "categories: 3 Amazon KDP category paths in English, like 'Business & Money > Personal Finance'.\n"
+            "bisac: 3 BISAC subject heading names in English, like "
+            "'BUSINESS & ECONOMICS / Personal Finance / General'.\n"
+            "short_description: one hook sentence, max 200 characters, in the eBook's language.\n"
+            "description_html: sales description, max 3000 characters, in the eBook's language, "
+            "using only <p>, <b>, <i>, <ul>, <li>, <br> tags. Start with a strong hook, list the key "
+            "benefits as bullets, end with a call to action.\n"
+            "Do not invent facts about the author.\n\nEBOOK TEXT:\n" + body}
+    ], max_tokens=2500, json_mode=True)
+    return parse_json(out)
+
+
+def _patch_epub(path, keywords):
+    """ePub ke andar SEO + accessibility metadata aur image alt text jodta hai."""
+    if not os.path.exists(path):
+        return False
+    today = time.strftime("%Y-%m-%d", time.gmtime())
+    subjects = "".join(f"<dc:subject>{html.escape(k)}</dc:subject>" for k in keywords)
+    dc_add = subjects + "<dc:publisher>Dr. Sabir Hussain</dc:publisher>" + f"<dc:date>{today}</dc:date>"
+    a11y = ('<meta property="schema:accessMode">textual</meta>'
+            '<meta property="schema:accessModeSufficient">textual</meta>'
+            '<meta property="schema:accessibilityFeature">tableOfContents</meta>'
+            '<meta property="schema:accessibilityFeature">structuralNavigation</meta>'
+            '<meta property="schema:accessibilityHazard">none</meta>'
+            '<meta property="schema:accessibilitySummary">Text-based eBook with a navigable table of '
+            'contents and chapter headings. Images are decorative illustrations.</meta>')
+    tmp = path + ".tmp"
+    with zipfile.ZipFile(path) as zin, zipfile.ZipFile(tmp, "w") as zout:
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            name = item.filename
+            if name == "OEBPS/content.opf":
+                s = data.decode("utf-8")
+                if "<dc:publisher>" not in s:
+                    marker = '<meta property="dcterms:modified">'
+                    if marker in s and "</metadata>" in s:
+                        s = s.replace(marker, dc_add + marker, 1)
+                        s = s.replace("</metadata>", a11y + "</metadata>", 1)
+                data = s.encode("utf-8")
+            elif re.match(r"^OEBPS/ch\d+\.xhtml$", name):
+                s = data.decode("utf-8")
+                m = re.search(r"<h2>(.*?)</h2>", s, re.S)
+                if m and 'alt=""' in s:
+                    s = s.replace('alt=""', f'alt="{m.group(1)}"')
+                data = s.encode("utf-8")
+            zout.writestr(item, data, compress_type=item.compress_type)
+    os.replace(tmp, path)
+    return True
+
+
+def make_seo_packs(book):
+    title = _clip(book["title"], 200)
+    subtitle = _clip(book.get("subtitle", ""), 200)
+
+    meta = {}
+    try:
+        meta = _ai_platform_meta(book)
+    except BaseException as ex:
+        print("SEO ka AI hissa nahi bana, book ke apne keywords use kiye:", ex)
+
+    keywords = [_clip(k, 50) for k in (meta.get("kdp_keywords") or book.get("keywords") or [])
+                if str(k).strip()][:7]
+    cats = [_clip(c, 120) for c in (meta.get("categories") or [])][:3]
+    bisac = [_clip(c, 120) for c in (meta.get("bisac") or [])][:3]
+    short = _clip(meta.get("short_description") or book.get("description", ""), 200)
+    desc_html = (meta.get("description_html") or "").strip()
+    if not desc_html:
+        desc_html = "<p>" + html.escape(book.get("description", "")) + "</p>"
+    desc_html = desc_html[:3900]
+    desc_text = _html_to_text(desc_html)
+
+    try:
+        ok = _patch_epub(f"covers/{LANG}.epub", keywords)
+        print("ePub mein SEO metadata jodi:", ok)
+    except BaseException as ex:
+        print("ePub metadata nahi judi (ePub waisi hi rahi):", ex)
+
+    def numbered(items):
+        return "\n".join(f"  {i}. {x}" for i, x in enumerate(items, 1)) or "  (nahi bana)"
+
+    kdp_lang_note = ("Urdu KDP par shayad na dikhe. Language dropdown mein Urdu na mile to KDP chhod do, "
+                     "sirf Google Play Books par daalo." if LANG == "urdu"
+                     else "Language dropdown mein apni language dikhe tabhi KDP par daalo; na dikhe to sirf Google Play Books.")
+
+    kdp = f"""=== AMAZON KDP SEO: {title} ({LANG_NAME}) ===
+Website: kdp.amazon.com > Create > Kindle eBook
+Files (GitHub repo ke covers/ folder se):
+  Manuscript : {LANG}.epub
+  Cover      : {LANG}-kdp-cover.jpg  (1600x2560)
+Har field mein neeche ka text seedha copy-paste karo.
+
+{kdp_lang_note}
+
+Title      : {title}
+Subtitle   : {subtitle}
+Author     : Dr. Sabir Hussain
+Publishing rights: I own the copyright
+AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP upload mein ye sawal aata hai, sach jawab do)
+
+Keywords (7 alag-alag boxes mein, ek ek karke):
+{numbered(keywords)}
+
+Categories (3 tak, KDP ke dropdown mein sabse milta-julta chuno):
+{numbered(cats)}
+
+Description (HTML sahit paste karo):
+{desc_html}
+
+KDP Select : ENROLL MAT KARO (Select mein ebook sirf Amazon par rakhni padti hai, aapki Gumroad par bhi hai)
+Price      : KDP 70% royalty tabhi deta hai jab price $2.99 se $9.99 ke beech ho. Sab jagah ek hi price rakhna safe hai.
+
+Upload se pehle checks:
+  1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?
+  2. Cover par title saaf padha ja raha hai?
+  3. Gumroad, KDP aur Google Play par title aur description same hain.
+"""
+
+    google = f"""=== GOOGLE PLAY BOOKS SEO: {title} ({LANG_NAME}) ===
+Website: play.google.com/books/publish > Book catalog
+Files (GitHub repo ke covers/ folder se):
+  Book  : {LANG}.epub  (ya {LANG}.pdf)
+  Cover : {LANG}-kdp-cover.jpg  (ya {LANG}.jpg)
+Har field mein neeche ka text seedha copy-paste karo.
+
+Title      : {title}
+Subtitle   : {subtitle}
+Author     : Dr. Sabir Hussain
+Publisher  : Dr. Sabir Hussain
+Language   : {LANG_NAME}
+
+Subjects (BISAC, dropdown mein sabse milta-julta chuno):
+{numbered(bisac)}
+
+Short hook (preview aur social share ke liye):
+{short}
+
+Description (plain text, seedha paste karo):
+{desc_text}
+
+Search ke liye keywords (Google Books mein alag keyword box nahi hota, inme se kuch words description mein rakhna behtar hai):
+{numbered(keywords)}
+
+Upload se pehle checks:
+  1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?
+  2. Cover par title saaf padha ja raha hai?
+  3. Gumroad, KDP aur Google Play par title aur description same hain.
+"""
+    open(f"covers/{LANG}-kdp-seo.txt", "w", encoding="utf-8").write(kdp)
+    open(f"covers/{LANG}-google-books-seo.txt", "w", encoding="utf-8").write(google)
+    print(f"SEO files ban gayi: covers/{LANG}-kdp-seo.txt aur covers/{LANG}-google-books-seo.txt")
 
 
 def gum_file(tok, api, path, filename):
