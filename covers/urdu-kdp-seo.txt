@@ -1,4 +1,4 @@
-=== AMAZON KDP SEO: نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنمائی (Urdu (Urdu script, right to left)) ===
+=== AMAZON KDP SEO: نیورل سرچ کی جڑیں اور انقلاب: تاریخ سے جدید تک (Urdu (Urdu script, right to left)) ===
 Website: kdp.amazon.com > Create > Kindle eBook
 Files (GitHub repo ke covers/ folder se):
   Manuscript : urdu.epub
@@ -7,28 +7,28 @@ Har field mein neeche ka text seedha copy-paste karo.
 
 Urdu KDP par shayad na dikhe. Language dropdown mein Urdu na mile to KDP chhod do, sirf Google Play Books par daalo.
 
-Title      : نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنمائی
-Subtitle   : تاریخ، ایولوشن اور جدید تکنیکوں کا جامع جائزہ
+Title      : نیورل سرچ کی جڑیں اور انقلاب: تاریخ سے جدید تک
+Subtitle   : پرانے اصولوں سے جدید ایولوشنری الگورتھم تک مکمل رہنمائی
 Author     : Dr. Sabir Hussain
 Publishing rights: I own the copyright
 AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP upload mein ye sawal aata hai, sach jawab do)
 
 Keywords (7 alag-alag boxes mein, ek ek karke):
   1. نیورل سرچ کی تاریخ
-  2. ریئنفورسمنٹ لرننگ سیکھیں
+  2. ایولوشنری الگورتھم
   3. آٹو ایم ایل زیرو گائیڈ
-  4. ایولوشنری الگورتھم تفصیل
-  5. ہارڈ ویئر اویئرنس راز
-  6. نیورل نیٹ ورک جڑیں
-  7. سرچ انجن تکنیکیں
+  4. ریئنفورسمنٹ لرننگ اردو
+  5. ہارڈ ویئر اویئرنس سرچ
+  6. بغیر لیبل تلاش
+  7. جدید نیورل سرچ
 
 Categories (3 tak, KDP ke dropdown mein sabse milta-julta chuno):
   1. Computers & Technology > Artificial Intelligence
   2. Science & Math > Computer Science > Machine Learning
-  3. Education & Teaching > Professional Development > Technology
+  3. Education & Teaching > Training & Development > Professional Development
 
 Description (HTML sahit paste karo):
-<p><b>نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنمائی</b> کے ساتھ AI کی دنیا میں قدم رکھیں۔ یہ کتاب تاریخ، ایولوشن اور جدید تکنیکوں کو ایک ہی جگہ پر پیش کرتی ہے۔</p><ul><li><i>تاریخی پس منظر</i> – ۱۹۰۰ کی دہائی سے آج تک کی اہم پیشرفتیں۔</li><li><i>ایولوشنری الگورتھم</i> – آٹو ایم ایل زیرو اور اس کے اصول۔</li><li><i>ہارڈ ویئر اویئرنس</i> – جدید سرورز اور GPU استعمال کی تفصیلات۔</li><li><i>ریئنفورسمنٹ لرننگ</i> – بغیر لیبل کی تلاش اور اس کے فوائد۔</li><li><i>پراکسی لیس این اے ایس</i> – ہارڈ ویئر میچ اور اس کی کارکردگی۔</li></ul><p>یہ کتاب نہ صرف تحقیق کاروں کے لیے، بلکہ طلباء اور پیشہ ور افراد کے لیے بھی مفید ہے جو نیورل سرچ کے بنیادی اصول اور جدید ایپلیکیشنز سمجھنا چاہتے ہیں۔</p><p><b>آج ہی اپنی کاپی حاصل کریں اور AI کی دنیا میں نئی بصیرت پیدا کریں!</b></p>
+<p><b>نیورل سرچ کے اصل جڑوں سے لے کر جدید AI تک کا سفر ابھی شروع ہوتا ہے!</b></p><p>یہ کتاب آپ کو فراہم کرتی ہے:</p><ul><li>تاریخی پس منظر اور اہم ایجادات کی تفصیل</li><li>ایولوشنری الگورتھم اور آٹو ایم ایل زیرو کی عملی گائیڈ</li><li>ہارڈ ویئر اویئرنس اور ریئنفورسمنٹ لرننگ کے راز</li><li>بغیر لیبل تلاش اور پراکسی لیس این اے ایس کی جدید تکنیکیں</li><li>۱۹۹۰ کی دہائی سے موجودہ دور تک کی مکمل ٹائم لائن</li></ul><p>ہر باب میں واضح مثالیں اور عملی نکات شامل ہیں جو طلباء، محققین اور پیشہ ور افراد کے لیے مفید ہیں۔</p><p><i>ابھی خریدیں اور نیورل سرچ کی دنیا میں ماہر بنیں!</i></p>
 
 KDP Select : ENROLL MAT KARO (Select mein ebook sirf Amazon par rakhni padti hai, aapki Gumroad par bhi hai)
 Price      : KDP 70% royalty tabhi deta hai jab price $2.99 se $9.99 ke beech ho. Sab jagah ek hi price rakhna safe hai.
