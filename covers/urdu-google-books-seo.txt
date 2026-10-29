@@ -1,43 +1,44 @@
-=== GOOGLE PLAY BOOKS SEO: نیورل سرچ کی جڑیں اور انقلاب: تاریخ سے جدید تک (Urdu (Urdu script, right to left)) ===
+=== GOOGLE PLAY BOOKS SEO: نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما (Urdu (Urdu script, right to left)) ===
 Website: play.google.com/books/publish > Book catalog
 Files (GitHub repo ke covers/ folder se):
   Book  : urdu.epub  (ya urdu.pdf)
   Cover : urdu-kdp-cover.jpg  (ya urdu.jpg)
 Har field mein neeche ka text seedha copy-paste karo.
 
-Title      : نیورل سرچ کی جڑیں اور انقلاب: تاریخ سے جدید تک
-Subtitle   : پرانے اصولوں سے جدید ایولوشنری الگورتھم تک مکمل رہنمائی
+Title      : نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما
+Subtitle   : 1990 سے جدید AI تک کے تاریخی اور تکنیکی راز
 Author     : Dr. Sabir Hussain
 Publisher  : Dr. Sabir Hussain
 Language   : Urdu (Urdu script, right to left)
 
 Subjects (BISAC, dropdown mein sabse milta-julta chuno):
-  1. COMPUTERS / Artificial Intelligence
-  2. SCIENCE / Computer Science / Machine Learning
-  3. EDUCATION / Training & Development / Professional
+  1. COMPUTER SCIENCE / Artificial Intelligence / General
+  2. COMPUTER SCIENCE / Machine Learning / General
+  3. EDUCATION / Higher Education / Computer Science
 
 Short hook (preview aur social share ke liye):
-نیورل سرچ کی جڑیں، ایولوشنری الگورتھم اور جدید AI کی مکمل رہنمائی، ایک ہی کتاب میں۔
+1990 سے جدید AI تک نیورل سرچ کے تاریخی اور تکنیکی رازوں کا مکمل رہنما۔
 
 Description (plain text, seedha paste karo):
-نیورل سرچ کے اصل جڑوں سے لے کر جدید AI تک کا سفر ابھی شروع ہوتا ہے!
-یہ کتاب آپ کو فراہم کرتی ہے:
-• تاریخی پس منظر اور اہم ایجادات کی تفصیل
-• ایولوشنری الگورتھم اور آٹو ایم ایل زیرو کی عملی گائیڈ
-• ہارڈ ویئر اویئرنس اور ریئنفورسمنٹ لرننگ کے راز
-• بغیر لیبل تلاش اور پراکسی لیس این اے ایس کی جدید تکنیکیں
-• ۱۹۹۰ کی دہائی سے موجودہ دور تک کی مکمل ٹائم لائن
-ہر باب میں واضح مثالیں اور عملی نکات شامل ہیں جو طلباء، محققین اور پیشہ ور افراد کے لیے مفید ہیں۔
-ابھی خریدیں اور نیورل سرچ کی دنیا میں ماہر بنیں!
+نیورل سرچ کی جڑیں اور انقلاب: 1990 کے آغاز سے آج کے AI تک کے سفر کو سمجھیں۔
+یہ کتاب آپ کو پیش کرتی ہے:
+• پہلی جنینی الگورتھم اور نیورل نیٹ ورک کی بنیادیں
+• ایولوشنری الگورتھم اور آٹو ایم ایل زیرو کی تکنیکیں
+• ہارڈ ویئر اویئرنس اور اس کے حیران کن راز
+• ریئنفورسمنٹ لرننگ کی تاریخی بوم اور اس کے اخراجات
+• پراکسی لیس این اے ایس اور ہارڈ ویئر میچ کے جدید طریقے
+ہر باب میں سادہ مثالیں اور واضح وضاحتیں ہیں جو طلباء، محققین اور AI کے شوقین افراد کے لیے مفید ہیں۔
+اپنی تحقیق کو نئی سمت دیں اور جدید AI کے مستقبل کو سمجھیں۔
+آج ہی خریدیں اور نیورل سرچ کے رازوں کو کھولیں!
 
 Search ke liye keywords (Google Books mein alag keyword box nahi hota, inme se kuch words description mein rakhna behtar hai):
   1. نیورل سرچ کی تاریخ
-  2. ایولوشنری الگورتھم
-  3. آٹو ایم ایل زیرو گائیڈ
-  4. ریئنفورسمنٹ لرننگ اردو
-  5. ہارڈ ویئر اویئرنس سرچ
-  6. بغیر لیبل تلاش
-  7. جدید نیورل سرچ
+  2. AI اور ریئنفورسمنٹ لرننگ
+  3. ایولوشنری الگورتھم
+  4. آٹو ایم ایل زیرو
+  5. 1990 کی نیورل نیٹ ورک
+  6. ہارڈ ویئر اویئرنس راز
+  7. پراکسی لیس این اے ایس
 
 Upload se pehle checks:
   1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?
