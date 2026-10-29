@@ -1,4 +1,4 @@
-=== AMAZON KDP SEO: न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी: इतिहास और भविष्य (Hindi (Devanagari script)) ===
+=== AMAZON KDP SEO: न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी: इतिहास से भविष्य तक (Hindi (Devanagari script)) ===
 Website: kdp.amazon.com > Create > Kindle eBook
 Files (GitHub repo ke covers/ folder se):
   Manuscript : hindi.epub
@@ -7,28 +7,28 @@ Har field mein neeche ka text seedha copy-paste karo.
 
 Language dropdown mein apni language dikhe tabhi KDP par daalo; na dikhe to sirf Google Play Books.
 
-Title      : न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी: इतिहास और भविष्य
-Subtitle   : जीनिक एल्गोरिद्म से एआई क्रांति तक का सफर
+Title      : न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी: इतिहास से भविष्य तक
+Subtitle   : जीनिटिक एल्गोरिदम से ऑटोएमएल ज़ीरो तक का सफर
 Author     : Dr. Sabir Hussain
 Publishing rights: I own the copyright
 AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP upload mein ye sawal aata hai, sach jawab do)
 
 Keywords (7 alag-alag boxes mein, ek ek karke):
   1. न्यूरल आर्किटेक्चर सर्च इतिहास
-  2. ऑटोएमएल ज़ीरो कैसे काम करता है
-  3. NAS हार्डवेयर सीमाएँ
-  4. लेबल‑रहित NAS तकनीक
-  5. इवोल्यूशनरी NAS का विकास
-  6. AI क्रांति और जीनिक एल्गोरिद्म
-  7. NAS थर्मल सीमाएँ और समाधान
+  2. ऑटोएमएल ज़ीरो यात्रा
+  3. इवोल्यूशनरी NAS तकनीक
+  4. हार्डवेयर‑अवेयर NAS विवरण
+  5. लेबल‑रहित NAS प्रीटेक्स्ट
+  6. थर्मल सीमाएँ और NAS
+  7. NAS का 1900‑से 2017 इतिहास
 
 Categories (3 tak, KDP ke dropdown mein sabse milta-julta chuno):
-  1. Science & Math > Computer Science > Artificial Intelligence
-  2. Technology > Software Development > Machine Learning
-  3. Education & Teaching > Higher Education > Computer Science
+  1. Computers & Technology > Artificial Intelligence
+  2. Science & Math > Computer Science > Machine Learning
+  3. Technology & Engineering > Data Science > Neural Networks
 
 Description (HTML sahit paste karo):
-<p><b>न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी</b>—इतिहास, तकनीकी चुनौतियों और भविष्य की संभावनाओं का गहन विश्लेषण।</p><p>इस पुस्तक में आप पाएँगे:</p><ul><li>NAS के शुरुआती प्रयोग और जीनिक एल्गोरिद्म की उत्पत्ति</li><li>इवोल्यूशनरी NAS, ऑटोएमएल ज़ीरो और हार्डवेयर‑अवेयर NAS की विस्तृत व्याख्या</li><li>लेबल‑रहित NAS और प्रीटेक्स्ट‑आधारित शक्ति के सिद्धांत</li><li>थर्मल सीमाएँ, GPU लागत और कंप्यूटिंग चुनौतियों का वास्तविक डेटा</li><li>भविष्य की दिशा—AI क्रांति में NAS की भूमिका</li></ul><p>पढ़ने के बाद आप समझेंगे कि कैसे पुराने जड़ों को जानकर नई तकनीकों की कमियों को दूर किया जा सकता है और अपने शोध या प्रोजेक्ट में बेहतर परिणाम प्राप्त किए जा सकते हैं।</p><p><i>अब ही इस ज्ञान को अपने हाथ में लें और AI के भविष्य को आकार देने में अग्रणी बनें!</i></p>
+<p><b>न्यूरल आर्किटेक्चर सर्च की सच्ची कहानी</b>—इतिहास से भविष्य तक का सफ़र!</p><p>यह पुस्तक आपको दिखाएगी:</p><ul><li>1990 के दशक में जेनेटिक एल्गोरिदम से शुरू हुई खोज</li><li>इवोल्यूशनरी NAS, ऑटोएमएल ज़ीरो और उनकी सीमाएँ</li><li>हार्डवेयर‑अवेयर NAS की चौंकाने वाली सच्चाई</li><li>लेबल‑रहित NAS की प्रीटेक्स्ट शक्ति</li><li>थर्मल सीमाएँ और हार्डवेयर संघर्ष</li><li>NAS का 1900‑से 2017 तक का विस्तृत इतिहास</li></ul><p>इन अंतर्दृष्टियों से आप भविष्य के AI मॉडल डिज़ाइन में बेहतर निर्णय ले सकेंगे, कंप्यूटिंग लागत घटा पाएंगे और नवीनतम तकनीकों को समझेंगे।</p><p><i>अब ही इस ज्ञान को अपनी लाइब्रेरी में जोड़ें और AI अनुसंधान की नई दिशा तय करें!</i></p>
 
 KDP Select : ENROLL MAT KARO (Select mein ebook sirf Amazon par rakhni padti hai, aapki Gumroad par bhi hai)
 Price      : KDP 70% royalty tabhi deta hai jab price $2.99 se $9.99 ke beech ho. Sab jagah ek hi price rakhna safe hai.
