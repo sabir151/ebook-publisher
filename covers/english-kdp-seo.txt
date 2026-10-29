@@ -1,0 +1,39 @@
+=== AMAZON KDP SEO: Hidden History of Neural Architecture Search: From 80s Genetics to Modern AI (English) ===
+Website: kdp.amazon.com > Create > Kindle eBook
+Files (GitHub repo ke covers/ folder se):
+  Manuscript : english.epub
+  Cover      : english-kdp-cover.jpg  (1600x2560)
+Har field mein neeche ka text seedha copy-paste karo.
+
+Language dropdown mein apni language dikhe tabhi KDP par daalo; na dikhe to sirf Google Play Books.
+
+Title      : Hidden History of Neural Architecture Search: From 80s Genetics to Modern AI
+Subtitle   : Discover the true roots and evolution of NAS before the 2017 hype
+Author     : Dr. Sabir Hussain
+Publishing rights: I own the copyright
+AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP upload mein ye sawal aata hai, sach jawab do)
+
+Keywords (7 alag-alag boxes mein, ek ek karke):
+  1. neural architecture search history
+  2. NAS evolution 1980s genetics
+  3. autoML zero origins
+  4. hardware aware NAS guide
+  5. label free NAS techniques
+  6. early neural network evolution
+  7. NAS before 2017
+
+Categories (3 tak, KDP ke dropdown mein sabse milta-julta chuno):
+  1. Computers & Technology > Artificial Intelligence
+  2. Science & Math > Computer Science > Machine Learning
+  3. Education & Teaching > Curriculum Guides > Computer Science
+
+Description (HTML sahit paste karo):
+<p><b>Discover the true origins of NAS before the 2017 hype!</b></p><p>This book reveals the forgotten milestones that shaped Neural Architecture Search, from early genetic algorithms to the latest hardware‑aware methods.</p><ul><li><i>Trace the 1980s genetic dawn that first automated network design.</i></li><li><i>Learn how evolutionary NAS and AutoML‑Zero evolved aging algorithms.</i></li><li><i>Understand hardware‑aware NAS and why one device can dominate performance.</i></li><li><i>Explore label‑free NAS and the self‑evolving magic behind AutoML‑Zero.</i></li><li><i>See the rapid rise from 1989 to 2017 and the lessons for today’s AI research.</i></li></ul><p>Whether you are a researcher, student, or AI enthusiast, this concise history gives you the context needed to innovate responsibly.</p><p><b>Grab your copy now and master the foundations of modern AI design!</b></p>
+
+KDP Select : ENROLL MAT KARO (Select mein ebook sirf Amazon par rakhni padti hai, aapki Gumroad par bhi hai)
+Price      : KDP 70% royalty tabhi deta hai jab price $2.99 se $9.99 ke beech ho. Sab jagah ek hi price rakhna safe hai.
+
+Upload se pehle checks:
+  1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?
+  2. Cover par title saaf padha ja raha hai?
+  3. Gumroad, KDP aur Google Play par title aur description same hain.

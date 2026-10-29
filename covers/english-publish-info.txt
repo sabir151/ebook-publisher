@@ -1,10 +1,10 @@
-TITLE: Hello Friends: Mastering Wealth, Mindset & Money Management
-SUBTITLE: Simple Strategies to Build Assets, Grow Savings, and Overcome Financial Biases
+TITLE: Hidden History of Neural Architecture Search: From 80s Genetics to Modern AI
+SUBTITLE: Discover the true roots and evolution of NAS before the 2017 hype
 LANGUAGE: English
-KEYWORDS: wealth building, asset investing, compound growth, financial psychology, debt management, emergency fund, money mindset
+KEYWORDS: Neural Architecture Search history, evolutionary NAS, AutoML-Zero, hardware-aware NAS, label-free NAS, NAS origins 1980s, AI model optimization
 
 DESCRIPTION:
-Discover practical ways to create true wealth beyond a salary, from investing in assets and harnessing compound growth to using debt wisely and building an emergency fund. Learn how your mind influences spending and how to avoid common psychological traps like FOMO and lifestyle inflation. This guide offers clear, actionable steps to secure your financial future and leverage the power of a strong network.
+Uncover the forgotten origins of Neural Architecture Search, from 1980s genetic algorithms to the groundbreaking work of Zoph and Le. This eBook reveals how evolutionary methods, hardware‑aware designs, and label‑free approaches reshaped AutoML. Learn why understanding these early breakthroughs is essential for tackling today’s AI challenges and gaining a competitive edge.
 
 FILES: english.epub (book), english-kdp-cover.jpg (cover 1600x2560)
 KDP: KDP par upload KARO (Hindi/English eBook)

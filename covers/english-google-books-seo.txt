@@ -1,0 +1,45 @@
+=== GOOGLE PLAY BOOKS SEO: Hidden History of Neural Architecture Search: From 80s Genetics to Modern AI (English) ===
+Website: play.google.com/books/publish > Book catalog
+Files (GitHub repo ke covers/ folder se):
+  Book  : english.epub  (ya english.pdf)
+  Cover : english-kdp-cover.jpg  (ya english.jpg)
+Har field mein neeche ka text seedha copy-paste karo.
+
+Title      : Hidden History of Neural Architecture Search: From 80s Genetics to Modern AI
+Subtitle   : Discover the true roots and evolution of NAS before the 2017 hype
+Author     : Dr. Sabir Hussain
+Publisher  : Dr. Sabir Hussain
+Language   : English
+
+Subjects (BISAC, dropdown mein sabse milta-julta chuno):
+  1. COMPUTERS / Artificial Intelligence
+  2. COMPUTERS / Machine Learning
+  3. EDUCATION / Curriculum Guides / Computer Science
+
+Short hook (preview aur social share ke liye):
+Uncover the hidden roots of Neural Architecture Search from 1980s genetics to the modern AI boom.
+
+Description (plain text, seedha paste karo):
+Discover the true origins of NAS before the 2017 hype!
+This book reveals the forgotten milestones that shaped Neural Architecture Search, from early genetic algorithms to the latest hardware‑aware methods.
+• Trace the 1980s genetic dawn that first automated network design.
+• Learn how evolutionary NAS and AutoML‑Zero evolved aging algorithms.
+• Understand hardware‑aware NAS and why one device can dominate performance.
+• Explore label‑free NAS and the self‑evolving magic behind AutoML‑Zero.
+• See the rapid rise from 1989 to 2017 and the lessons for today’s AI research.
+Whether you are a researcher, student, or AI enthusiast, this concise history gives you the context needed to innovate responsibly.
+Grab your copy now and master the foundations of modern AI design!
+
+Search ke liye keywords (Google Books mein alag keyword box nahi hota, inme se kuch words description mein rakhna behtar hai):
+  1. neural architecture search history
+  2. NAS evolution 1980s genetics
+  3. autoML zero origins
+  4. hardware aware NAS guide
+  5. label free NAS techniques
+  6. early neural network evolution
+  7. NAS before 2017
+
+Upload se pehle checks:
+  1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?
+  2. Cover par title saaf padha ja raha hai?
+  3. Gumroad, KDP aur Google Play par title aur description same hain.
