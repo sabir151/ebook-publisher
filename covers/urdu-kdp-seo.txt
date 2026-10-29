@@ -1,0 +1,39 @@
+=== AMAZON KDP SEO: نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما (Urdu (Urdu script, right to left)) ===
+Website: kdp.amazon.com > Create > Kindle eBook
+Files (GitHub repo ke covers/ folder se):
+  Manuscript : urdu.epub
+  Cover      : urdu-kdp-cover.jpg  (1600x2560)
+Har field mein neeche ka text seedha copy-paste karo.
+
+Urdu KDP par shayad na dikhe. Language dropdown mein Urdu na mile to KDP chhod do, sirf Google Play Books par daalo.
+
+Title      : نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما
+Subtitle   : 1990 سے جدید AI تک کی تاریخ اور تکنیکی راز
+Author     : Dr. Sabir Hussain
+Publishing rights: I own the copyright
+AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP upload mein ye sawal aata hai, sach jawab do)
+
+Keywords (7 alag-alag boxes mein, ek ek karke):
+  1. نیورل سرچ کی تاریخ
+  2. AI اور مشین لرننگ کی جڑیں
+  3. ری انفورسمنٹ لرننگ بوم
+  4. آٹو ایم ایل زیرو گائیڈ
+  5. ایولوشنری الگورتھم تفصیل
+  6. ہارد ویئر اویئرنس راز
+  7. 1990 سے AI تک کا سفر
+
+Categories (3 tak, KDP ke dropdown mein sabse milta-julta chuno):
+  1. Science & Math > Computer Science > Artificial Intelligence
+  2. Technology > Software Development > Machine Learning
+  3. Education & Teaching > Curriculum & Instruction > Computer Science
+
+Description (HTML sahit paste karo):
+<p><b>AI کی بنیادیں سیکھیں اور نیورل سرچ کے تاریخی راز دریافت کریں!</b></p><p>یہ کتاب 1990 کی شروعات سے لے کر آج کے جدید AI ماڈلز تک کا مکمل سفر پیش کرتی ہے۔ آپ کو ملے گا:</p><ul><li><i>نیورل سرچ کی اصل جڑیں اور تاریخی پس منظر</i></li><li><i>ایولوشنری الگورتھم اور آٹو ایم ایل زیرو کی تفصیلی وضاحت</i></li><li><i>ہارڈ ویئر اویئرنس اور اس کے حیران کن اثرات</i></li><li><i>ری انفورسمنٹ لرننگ کے بوم اور بغیر لیبل کی تلاش کے طریقے</i></li><li><i>پراکسی لیس این اے ایس اور ہارڈ ویئر میچ کے جدید رجحانات</i></li></ul><p>ہر باب میں عملی مثالیں اور واضح تشریحات شامل ہیں تاکہ آپ خود بھی جدید AI ماڈلز ڈیزائن کر سکیں۔</p><p><b>ابھی ڈاؤن لوڈ کریں اور AI کی دنیا میں قدم رکھیں!</b></p>
+
+KDP Select : ENROLL MAT KARO (Select mein ebook sirf Amazon par rakhni padti hai, aapki Gumroad par bhi hai)
+Price      : KDP 70% royalty tabhi deta hai jab price $2.99 se $9.99 ke beech ho. Sab jagah ek hi price rakhna safe hai.
+
+Upload se pehle checks:
+  1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?
+  2. Cover par title saaf padha ja raha hai?
+  3. Gumroad, KDP aur Google Play par title aur description same hain.

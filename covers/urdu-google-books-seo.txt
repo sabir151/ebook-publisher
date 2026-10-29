@@ -1,0 +1,45 @@
+=== GOOGLE PLAY BOOKS SEO: نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما (Urdu (Urdu script, right to left)) ===
+Website: play.google.com/books/publish > Book catalog
+Files (GitHub repo ke covers/ folder se):
+  Book  : urdu.epub  (ya urdu.pdf)
+  Cover : urdu-kdp-cover.jpg  (ya urdu.jpg)
+Har field mein neeche ka text seedha copy-paste karo.
+
+Title      : نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما
+Subtitle   : 1990 سے جدید AI تک کی تاریخ اور تکنیکی راز
+Author     : Dr. Sabir Hussain
+Publisher  : Dr. Sabir Hussain
+Language   : Urdu (Urdu script, right to left)
+
+Subjects (BISAC, dropdown mein sabse milta-julta chuno):
+  1. COMPUTER SCIENCE / Artificial Intelligence / General
+  2. COMPUTER SCIENCE / Machine Learning / General
+  3. EDUCATION / Curriculum & Instruction / Computer Science
+
+Short hook (preview aur social share ke liye):
+1990 سے جدید AI تک کی مکمل رہنمائی، نیورل سرچ کے راز اور ایولوشنری تکنیکوں کا جامع سفر۔
+
+Description (plain text, seedha paste karo):
+AI کی بنیادیں سیکھیں اور نیورل سرچ کے تاریخی راز دریافت کریں!
+یہ کتاب 1990 کی شروعات سے لے کر آج کے جدید AI ماڈلز تک کا مکمل سفر پیش کرتی ہے۔ آپ کو ملے گا:
+• نیورل سرچ کی اصل جڑیں اور تاریخی پس منظر
+• ایولوشنری الگورتھم اور آٹو ایم ایل زیرو کی تفصیلی وضاحت
+• ہارڈ ویئر اویئرنس اور اس کے حیران کن اثرات
+• ری انفورسمنٹ لرننگ کے بوم اور بغیر لیبل کی تلاش کے طریقے
+• پراکسی لیس این اے ایس اور ہارڈ ویئر میچ کے جدید رجحانات
+ہر باب میں عملی مثالیں اور واضح تشریحات شامل ہیں تاکہ آپ خود بھی جدید AI ماڈلز ڈیزائن کر سکیں۔
+ابھی ڈاؤن لوڈ کریں اور AI کی دنیا میں قدم رکھیں!
+
+Search ke liye keywords (Google Books mein alag keyword box nahi hota, inme se kuch words description mein rakhna behtar hai):
+  1. نیورل سرچ کی تاریخ
+  2. AI اور مشین لرننگ کی جڑیں
+  3. ری انفورسمنٹ لرننگ بوم
+  4. آٹو ایم ایل زیرو گائیڈ
+  5. ایولوشنری الگورتھم تفصیل
+  6. ہارد ویئر اویئرنس راز
+  7. 1990 سے AI تک کا سفر
+
+Upload se pehle checks:
+  1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?
+  2. Cover par title saaf padha ja raha hai?
+  3. Gumroad, KDP aur Google Play par title aur description same hain.
