@@ -717,18 +717,61 @@ def gum_file(tok, api, path, filename):
 
 
 def upload():
+    """Gumroad par POORA kaam karta hai. Kuch adhoora rah jaye to product hata deta hai aur run ko FAIL karta hai
+    (taaki 'Ho gaya' ka jhootha sandesh na aaye aur adhoore drafts jama na hon)."""
     tok = os.environ["GUMROAD_TOKEN"]
     api = "https://api.gumroad.com/v2"
     book = json.load(open("work/book.json", encoding="utf-8"))
+    title = book["title"][:200]
 
-    urls = [gum_file(tok, api, "work/ebook.pdf", f"{LANG}-ebook.pdf")]
-    if os.path.exists(f"covers/{LANG}.epub"):
-        try:
-            urls.append(gum_file(tok, api, f"covers/{LANG}.epub", f"{LANG}-ebook.epub"))
-        except BaseException as ex:
-            print("EPUB Gumroad par nahi gayi, sirf PDF jayegi:", ex)
+    def abort(msg, pid=None):
+        if pid:
+            try:
+                d = requests.delete(f"{api}/products/{pid}", params={"access_token": tok}, timeout=60).json()
+                print("Adhoora product hata diya:", pid, d.get("success"))
+            except Exception as ex:
+                print("WARNING: adhoora product hata nahi paya, Gumroad mein haath se delete karo:", pid, ex)
+        sys.exit("ADHOORA, isliye run fail kiya: " + msg)
+
+    def get_prod(pid):
+        r = requests.get(f"{api}/products/{pid}", params={"access_token": tok}, timeout=60).json()
+        return r.get("product") or {}
+
+    def up(path, name):
+        last = None
+        for i in range(3):
+            try:
+                return gum_file(tok, api, path, name)
+            except BaseException as ex:  # gum_file sys.exit bhi karta hai
+                last = ex
+                print(f"{name} upload fail, dobara koshish ({i + 1}/3):", ex)
+                time.sleep(5)
+        raise RuntimeError(f"{name} Gumroad par upload nahi ho payi: {last}")
+
+    # 0) Isi naam ka purana adhoora draft ho to hata do (duplicate na bane)
+    try:
+        lst = requests.get(f"{api}/products", params={"access_token": tok}, timeout=60).json()
+        for p in lst.get("products", []):
+            if p.get("name") == title:
+                if p.get("published"):
+                    sys.exit("Is naam ka product Gumroad par pehle se PUBLISHED hai, dobara nahi banaya. "
+                             "Naya version chahiye to Gumroad mein purana hata do.")
+                d = requests.delete(f"{api}/products/{p['id']}", params={"access_token": tok}, timeout=60).json()
+                print("Purana draft hataya:", p["id"], d.get("success"))
+    except Exception as ex:
+        print("Purane drafts check nahi hue:", ex)
+
+    # 1) Files (PDF zaroori, ePub bhi agar bani hai)
+    urls = []
+    try:
+        urls.append(up("work/ebook.pdf", f"{LANG}-ebook.pdf"))
+        if os.path.exists(f"covers/{LANG}.epub"):
+            urls.append(up(f"covers/{LANG}.epub", f"{LANG}-ebook.epub"))
+    except RuntimeError as ex:
+        abort(str(ex))
     print("Files ready:", len(urls))
 
+    # 2) Product (SEO title, subtitle, description, chapters, keywords)
     chapters = "".join("<li>" + html.escape(c["title"]) + "</li>" for c in book["chapters"])
     desc = ("<p><strong>" + html.escape(book["subtitle"]) + "</strong></p>"
             "<p>" + html.escape(book["description"]) + "</p>"
@@ -738,42 +781,63 @@ def upload():
 
     prod = None
     for ntype in ("ebook", "digital"):
-        data = [("access_token", tok), ("native_type", ntype), ("name", book["title"][:200]),
+        data = [("access_token", tok), ("native_type", ntype), ("name", title),
                 ("description", desc), ("price", PRICE_CENTS), ("price_currency_type", "usd")]
         data += [("files[][url]", u) for u in urls]
-        pr = requests.post(api + "/products", data=data, timeout=60).json()
+        pr = requests.post(f"{api}/products", data=data, timeout=60).json()
         if pr.get("success"):
             prod = pr["product"]
             break
         print("Product create fail:", ntype, pr)
     if not prod:
-        sys.exit("Gumroad product nahi bana. Upar ka error dekho.")
+        abort("Gumroad product nahi bana. Upar ka error dekho.")
     pid = prod["id"]
-    print("Product bana:", pid, "| title:", book["title"])
+    print("Product bana:", pid, "| title:", title)
 
-    # Check: file sach mein judi? Na judi to update se dobara try
-    time.sleep(3)
-    chk = requests.get(f"{api}/products/{pid}", params={"access_token": tok}, timeout=60).json()
-    nfiles = len((chk.get("product") or {}).get("files") or [])
-    print("Product mein files:", nfiles)
-    if nfiles == 0:
-        up = [("access_token", tok)] + [("files[][url]", u) for u in urls]
-        ur = requests.put(f"{api}/products/{pid}", data=up, timeout=60).json()
-        print("Files dobara jodne ki koshish:", ur.get("success"), "" if ur.get("success") else ur)
-        chk = requests.get(f"{api}/products/{pid}", params={"access_token": tok}, timeout=60).json()
-        nfiles = len((chk.get("product") or {}).get("files") or [])
-        print("Ab product mein files:", nfiles)
-        if nfiles == 0:
-            print("WARNING: file attach nahi hui. Gumroad mein Content tab mein haath se daalo:",
-                  "Actions > 'PDF backup' artifact ya covers/ folder mein", f"{LANG}.epub")
+    # 3) Check: files sach mein judi? Na judi to dobara jodo, phir bhi na judi to product hata do
+    ok_files = False
+    for attempt in range(3):
+        time.sleep(3)
+        files = get_prod(pid).get("files") or []
+        if len(files) >= len(urls):
+            ok_files = True
+            break
+        print(f"Product mein files {len(files)}/{len(urls)} hain, dobara jod rahe hain...")
+        ur = requests.put(f"{api}/products/{pid}",
+                          data=[("access_token", tok)] + [("files[][url]", u) for u in urls], timeout=60).json()
+        print("Files update:", ur.get("success"), "" if ur.get("success") else ur)
+    if not ok_files:
+        abort("Files Gumroad product mein nahi judi.", pid)
+    print("Files judi:", len(urls))
 
-    # Cover (square) - Gumroad iska thumbnail bhi isi se banata hai
-    if os.path.exists(f"covers/{LANG}.jpg"):
-        repo = os.environ.get("GITHUB_REPOSITORY", "")
-        url = f"https://raw.githubusercontent.com/{repo}/main/covers/{LANG}.jpg"
-        time.sleep(8)
+    # 4) Cover (zaroori) aur Thumbnail (alag cheez hai)
+    sq = f"covers/{LANG}.jpg"
+    if not os.path.exists(sq):
+        abort(f"{sq} nahi mili (Drive mein {LANG}.jpg / {LANG}_cover.jpg cover image check karo).", pid)
+    repo = os.environ.get("GITHUB_REPOSITORY", "")
+    url = f"https://raw.githubusercontent.com/{repo}/main/covers/{LANG}.jpg"
+    cover_ok = False
+    for attempt in range(4):
+        time.sleep(8 if attempt == 0 else 20)  # GitHub par nayi file dikhne mein thoda time lagta hai
         cr = requests.post(f"{api}/products/{pid}/covers", data={"access_token": tok, "url": url}, timeout=60).json()
         print("Cover:", cr.get("success"), "" if cr.get("success") else cr)
+        if cr.get("success"):
+            cover_ok = True
+            break
+    if not cover_ok:
+        abort("Cover Gumroad par nahi laga.", pid)
+    thumb_ok = False
+    for attempt in range(3):
+        try:
+            tr = requests.post(f"{api}/products/{pid}/thumbnail",
+                               data={"access_token": tok, "url": url}, timeout=60).json()
+            print("Thumbnail:", tr.get("success"), "" if tr.get("success") else tr)
+            if tr.get("success"):
+                thumb_ok = True
+                break
+        except Exception as ex:
+            print("Thumbnail set nahi hua:", ex)
+        time.sleep(15)
 
     if CTA:
         try:
@@ -783,16 +847,26 @@ def upload():
         except Exception as ex:
             print("Call to action set nahi hua:", ex)
 
+    # 5) Publish ya draft
     if os.environ.get("EB_PUBLISH", "false").lower() == "true":
         er = requests.put(f"{api}/products/{pid}/enable", data={"access_token": tok}, timeout=60).json()
         print("Publish:", er.get("success"))
+        state = "PUBLISHED" if er.get("success") else "publish NAHI hua, Gumroad mein jaake Publish dabao"
     else:
         dr = requests.put(f"{api}/products/{pid}/disable", data={"access_token": tok}, timeout=60).json()
         if dr.get("success"):
-            print("Draft/Unpublished kar diya. Gumroad mein jaake dekho aur publish karo.")
+            state = "DRAFT (Gumroad mein jaake dekho aur Publish karo)"
         else:
-            print("WARNING: draft nahi ban paya, product LIVE ho sakta hai! Gumroad mein jaake Unpublish karo.", dr)
-    print("Product link:", prod.get("short_url"))
+            state = "WARNING: draft nahi ban paya, product LIVE ho sakta hai! Gumroad mein jaake Unpublish karo"
+
+    print("=" * 44)
+    print("GUMROAD REPORT:", title)
+    print("  Files (PDF + ePub) :", "OK" if ok_files else "NAHI")
+    print("  Cover              : OK")
+    print("  Thumbnail          :", "OK" if thumb_ok else "NAHI LAGA (Gumroad mein haath se Upload karo)")
+    print("  Status             :", state)
+    print("  Product link       :", prod.get("short_url"))
+    print("=" * 44)
 
 
 {"fetch": fetch, "write": write, "pdf": pdf, "upload": upload}[sys.argv[1]]()
