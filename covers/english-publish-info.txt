@@ -1,10 +1,10 @@
-TITLE: Hidden History of Neural Architecture Search: From 80s Genetics to Modern AI
-SUBTITLE: Discover the true roots and evolution of NAS before the 2017 hype
+TITLE: Hidden History of Neural Architecture Search: From 1980s to Today
+SUBTITLE: Discover the untold roots, evolution, and future of NAS
 LANGUAGE: English
-KEYWORDS: Neural Architecture Search history, evolutionary NAS, AutoML-Zero, hardware-aware NAS, label-free NAS, NAS origins 1980s, AI model optimization
+KEYWORDS: Neural Architecture Search history, evolutionary NAS, AutoML Zero, hardware aware NAS, label free NAS, NAS evolution timeline, AI model optimization
 
 DESCRIPTION:
-Uncover the forgotten origins of Neural Architecture Search, from 1980s genetic algorithms to the groundbreaking work of Zoph and Le. This eBook reveals how evolutionary methods, hardware‑aware designs, and label‑free approaches reshaped AutoML. Learn why understanding these early breakthroughs is essential for tackling today’s AI challenges and gaining a competitive edge.
+Unlock the true origins of Neural Architecture Search and see why the 2017 breakthrough was just the tip of the iceberg. This eBook reveals the 1980s genetic experiments, the rise of evolutionary NAS, hardware‑aware tricks, and label‑free auto‑ML breakthroughs. Learn how early methods shaped modern AI and gain actionable insights for faster, more efficient model design.
 
 FILES: english.epub (book), english-kdp-cover.jpg (cover 1600x2560)
 KDP: KDP par upload KARO (Hindi/English eBook)
