@@ -814,9 +814,14 @@ def upload():
     if not ok_files:
         abort("Files Gumroad product mein nahi judi.", pid)
     print("Files judi:", len(urls))
+
+    # DEBUG: Gumroad files ko kis form mein rakh raha hai (fail nahi hoga)
+    try:
         _p = get_prod(pid)
-    print("DEBUG files:", _p.get("files"))
-    print("DEBUG keys:", sorted(_p.keys()))
+        print("DEBUG files:", _p.get("files"))
+        print("DEBUG keys:", sorted(_p.keys()))
+    except Exception as ex:
+        print("DEBUG fail:", ex)
 
     # 4) Cover (zaroori) aur Thumbnail (alag cheez hai)
     sq = f"covers/{LANG}.jpg"
