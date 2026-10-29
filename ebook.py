@@ -502,6 +502,7 @@ def epub():
             f"KDP: {kdp_note}\nGoogle Play Books: upload KARO\n")
     open(f"covers/{LANG}-publish-info.txt", "w", encoding="utf-8").write(info)
     print("EPUB + publish-info ban gayi (chapter images:", len(imgs_used), ") covers/ folder dekho")
+       __import__("publish_pack").safe_run(LANG, LANG_NAME, LANG_CODE, groq)
 
 
 def gum_file(tok, api, path, filename):
