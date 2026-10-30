@@ -1,44 +1,43 @@
-=== GOOGLE PLAY BOOKS SEO: نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما (Urdu (Urdu script, right to left)) ===
+=== GOOGLE PLAY BOOKS SEO: کریڈٹ کارڈ سیکیورٹی کے راز: مالی حفاظت اور ریوارڈز (Urdu (Urdu script, right to left)) ===
 Website: play.google.com/books/publish > Book catalog
 Files (GitHub repo ke covers/ folder se):
   Book  : urdu.epub  (ya urdu.pdf)
   Cover : urdu-kdp-cover.jpg  (ya urdu.jpg)
 Har field mein neeche ka text seedha copy-paste karo.
 
-Title      : نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما
-Subtitle   : 1990 سے جدید AI تک کے تاریخی اور تکنیکی راز
+Title      : کریڈٹ کارڈ سیکیورٹی کے راز: مالی حفاظت اور ریوارڈز
+Subtitle   : ڈیبیٹ کے خطرات سے بچ کر کریڈٹ کے فوائد حاصل کریں
 Author     : Dr. Sabir Hussain
 Publisher  : Dr. Sabir Hussain
 Language   : Urdu (Urdu script, right to left)
 
 Subjects (BISAC, dropdown mein sabse milta-julta chuno):
-  1. COMPUTER SCIENCE / Artificial Intelligence / General
-  2. COMPUTER SCIENCE / Machine Learning / General
-  3. EDUCATION / Higher Education / Computer Science
+  1. BUSINESS & ECONOMICS / Personal Finance / General
+  2. BUSINESS & ECONOMICS / Credit Cards / General
+  3. BUSINESS & ECONOMICS / Banking / General
 
 Short hook (preview aur social share ke liye):
-1990 سے جدید AI تک نیورل سرچ کے تاریخی اور تکنیکی رازوں کا مکمل رہنما۔
+کریڈٹ کارڈ کے ذریعے مالی حفاظت، ریوارڈز اور خطرات سے بچنے کے راز جانیں۔
 
 Description (plain text, seedha paste karo):
-نیورل سرچ کی جڑیں اور انقلاب: 1990 کے آغاز سے آج کے AI تک کے سفر کو سمجھیں۔
-یہ کتاب آپ کو پیش کرتی ہے:
-• پہلی جنینی الگورتھم اور نیورل نیٹ ورک کی بنیادیں
-• ایولوشنری الگورتھم اور آٹو ایم ایل زیرو کی تکنیکیں
-• ہارڈ ویئر اویئرنس اور اس کے حیران کن راز
-• ریئنفورسمنٹ لرننگ کی تاریخی بوم اور اس کے اخراجات
-• پراکسی لیس این اے ایس اور ہارڈ ویئر میچ کے جدید طریقے
-ہر باب میں سادہ مثالیں اور واضح وضاحتیں ہیں جو طلباء، محققین اور AI کے شوقین افراد کے لیے مفید ہیں۔
-اپنی تحقیق کو نئی سمت دیں اور جدید AI کے مستقبل کو سمجھیں۔
-آج ہی خریدیں اور نیورل سرچ کے رازوں کو کھولیں!
+اپنی محنت کی کمائی کو محفوظ رکھیں اور ریوارڈز سے فائدہ اٹھائیں!
+یہ کتاب آپ کو دکھائے گی کہ ڈیبیٹ کارڈ کے خطرات سے کیسے بچا جائے اور کریڈٹ کارڈ کے کم خطرے، بہتر فوائد اور ریوارڈز کیسے حاصل کیے جائیں۔
+• ڈیبیٹ اور کریڈٹ کے سیکیورٹی فرق کی مکمل وضاحت
+• پٹرول، ہوٹل اور ریسٹورنٹ میں کریڈٹ کارڈ کے استعمال کے فائدے
+• سمارٹ کارڈ انتخاب سے بجٹ کی بچت اور ریوارڈز کی زیادہ سے زیادہ کمائی
+• ای ایم آئی اور ریکرنگ پیمنٹ میں کارڈ سیکیورٹی کے راز
+• چارج بیک اور فریزر ہولڈ کے عمل کو سمجھیں
+ہر باب میں عملی مثالیں اور فوری عمل کے نکات شامل ہیں تاکہ آپ فوراً اپنی مالی حفاظت کو بہتر بنا سکیں۔
+ابھی ڈاؤنلوڈ کریں اور اپنی مالی حفاظت کی نئی راہ پر قدم بڑھائیں!
 
 Search ke liye keywords (Google Books mein alag keyword box nahi hota, inme se kuch words description mein rakhna behtar hai):
-  1. نیورل سرچ کی تاریخ
-  2. AI اور ریئنفورسمنٹ لرننگ
-  3. ایولوشنری الگورتھم
-  4. آٹو ایم ایل زیرو
-  5. 1990 کی نیورل نیٹ ورک
-  6. ہارڈ ویئر اویئرنس راز
-  7. پراکسی لیس این اے ایس
+  1. کریڈٹ کارڈ سیکیورٹی
+  2. ڈیبیٹ کارڈ خطرات
+  3. کریڈٹ کارڈ فوائد
+  4. پٹرول پر کریڈٹ استعمال
+  5. ہوٹل میں کارڈ سیکیورٹی
+  6. ریکرنگ پیمنٹ سیکیورٹی
+  7. کارڈ ریوارڈز اور بچت
 
 Upload se pehle checks:
   1. ePub kholkar dekho: title, chapters aur contents list theek dikh rahi hai?

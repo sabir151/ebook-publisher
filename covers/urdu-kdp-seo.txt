@@ -1,4 +1,4 @@
-=== AMAZON KDP SEO: نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما (Urdu (Urdu script, right to left)) ===
+=== AMAZON KDP SEO: کریڈٹ کارڈ سیکیورٹی کے راز: مالی حفاظت اور ریوارڈز (Urdu (Urdu script, right to left)) ===
 Website: kdp.amazon.com > Create > Kindle eBook
 Files (GitHub repo ke covers/ folder se):
   Manuscript : urdu.epub
@@ -7,28 +7,28 @@ Har field mein neeche ka text seedha copy-paste karo.
 
 Urdu KDP par shayad na dikhe. Language dropdown mein Urdu na mile to KDP chhod do, sirf Google Play Books par daalo.
 
-Title      : نیورل سرچ کی جڑیں اور انقلاب: مکمل رہنما
-Subtitle   : 1990 سے جدید AI تک کے تاریخی اور تکنیکی راز
+Title      : کریڈٹ کارڈ سیکیورٹی کے راز: مالی حفاظت اور ریوارڈز
+Subtitle   : ڈیبیٹ کے خطرات سے بچ کر کریڈٹ کے فوائد حاصل کریں
 Author     : Dr. Sabir Hussain
 Publishing rights: I own the copyright
 AI-generated content: agar text ya images AI se bane hain to "Yes" chuno (KDP upload mein ye sawal aata hai, sach jawab do)
 
 Keywords (7 alag-alag boxes mein, ek ek karke):
-  1. نیورل سرچ کی تاریخ
-  2. AI اور ریئنفورسمنٹ لرننگ
-  3. ایولوشنری الگورتھم
-  4. آٹو ایم ایل زیرو
-  5. 1990 کی نیورل نیٹ ورک
-  6. ہارڈ ویئر اویئرنس راز
-  7. پراکسی لیس این اے ایس
+  1. کریڈٹ کارڈ سیکیورٹی
+  2. ڈیبیٹ کارڈ خطرات
+  3. کریڈٹ کارڈ فوائد
+  4. پٹرول پر کریڈٹ استعمال
+  5. ہوٹل میں کارڈ سیکیورٹی
+  6. ریکرنگ پیمنٹ سیکیورٹی
+  7. کارڈ ریوارڈز اور بچت
 
 Categories (3 tak, KDP ke dropdown mein sabse milta-julta chuno):
-  1. Science & Math > Computer Science > Artificial Intelligence
-  2. Technology & Engineering > Computer Science > Machine Learning
-  3. Education & Teaching > Higher Education > Computer Science
+  1. Business & Money > Personal Finance
+  2. Business & Money > Credit Cards
+  3. Business & Money > Banking
 
 Description (HTML sahit paste karo):
-<p><b>نیورل سرچ کی جڑیں اور انقلاب:</b> 1990 کے آغاز سے آج کے AI تک کے سفر کو سمجھیں۔</p><p>یہ کتاب آپ کو پیش کرتی ہے:</p><ul><li>پہلی جنینی الگورتھم اور نیورل نیٹ ورک کی بنیادیں</li><li>ایولوشنری الگورتھم اور آٹو ایم ایل زیرو کی تکنیکیں</li><li>ہارڈ ویئر اویئرنس اور اس کے حیران کن راز</li><li>ریئنفورسمنٹ لرننگ کی تاریخی بوم اور اس کے اخراجات</li><li>پراکسی لیس این اے ایس اور ہارڈ ویئر میچ کے جدید طریقے</li></ul><p>ہر باب میں سادہ مثالیں اور واضح وضاحتیں ہیں جو طلباء، محققین اور AI کے شوقین افراد کے لیے مفید ہیں۔</p><p><i>اپنی تحقیق کو نئی سمت دیں اور جدید AI کے مستقبل کو سمجھیں۔</i></p><p><b>آج ہی خریدیں اور نیورل سرچ کے رازوں کو کھولیں!</b></p>
+<p><b>اپنی محنت کی کمائی کو محفوظ رکھیں اور ریوارڈز سے فائدہ اٹھائیں!</b></p><p>یہ کتاب آپ کو دکھائے گی کہ ڈیبیٹ کارڈ کے خطرات سے کیسے بچا جائے اور کریڈٹ کارڈ کے کم خطرے، بہتر فوائد اور ریوارڈز کیسے حاصل کیے جائیں۔</p><ul><li>ڈیبیٹ اور کریڈٹ کے سیکیورٹی فرق کی مکمل وضاحت</li><li>پٹرول، ہوٹل اور ریسٹورنٹ میں کریڈٹ کارڈ کے استعمال کے فائدے</li><li>سمارٹ کارڈ انتخاب سے بجٹ کی بچت اور ریوارڈز کی زیادہ سے زیادہ کمائی</li><li>ای ایم آئی اور ریکرنگ پیمنٹ میں کارڈ سیکیورٹی کے راز</li><li>چارج بیک اور فریزر ہولڈ کے عمل کو سمجھیں</li></ul><p>ہر باب میں عملی مثالیں اور فوری عمل کے نکات شامل ہیں تاکہ آپ فوراً اپنی مالی حفاظت کو بہتر بنا سکیں۔</p><p><i>ابھی ڈاؤنلوڈ کریں اور اپنی مالی حفاظت کی نئی راہ پر قدم بڑھائیں!</i></p>
 
 KDP Select : ENROLL MAT KARO (Select mein ebook sirf Amazon par rakhni padti hai, aapki Gumroad par bhi hai)
 Price      : KDP 70% royalty tabhi deta hai jab price $2.99 se $9.99 ke beech ho. Sab jagah ek hi price rakhna safe hai.
