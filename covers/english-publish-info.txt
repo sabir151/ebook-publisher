@@ -1,10 +1,10 @@
-TITLE: Hidden History of Neural Architecture Search: From 1980s Genetics to Modern AI
-SUBTITLE: Discover the untold origins and evolution of NAS techniques
+TITLE: Why Credit Beats Debit: Protect Your Money & Boost Rewards
+SUBTITLE: Discover how credit cards safeguard your funds and earn cash back
 LANGUAGE: English
-KEYWORDS: Neural Architecture Search history, NAS evolution, AutoML Zero, hardware aware NAS, evolutionary NAS, label free NAS, NAS origins
+KEYWORDS: credit card safety, debit card fraud, petrol pump hold credit, hotel pre‑authorization credit card, cash back rewards credit, CIBIL score protection, online transaction security
 
 DESCRIPTION:
-Unearth the true roots of Neural Architecture Search, tracing its journey from 1980s genetic algorithms to the 2017 reinforcement‑learning boom. Learn how early breakthroughs, hardware‑aware strategies, and label‑free AutoML‑Zero reshaped AI development. This concise guide reveals why understanding NAS's past is essential for mastering today’s fast‑paced AutoML landscape.
+Learn why using a credit card is far safer than a debit card for everyday purchases, travel, and online shopping. This guide reveals how credit cards prevent fraud, avoid costly holds at petrol pumps and hotels, and protect your hard‑earned money. Plus, uncover the cash‑back and reward benefits that debit cards simply can’t match. Make the smart switch and keep your finances secure and growing.
 
 FILES: english.epub (book), english-kdp-cover.jpg (cover 1600x2560)
 KDP: KDP par upload KARO (Hindi/English eBook)
